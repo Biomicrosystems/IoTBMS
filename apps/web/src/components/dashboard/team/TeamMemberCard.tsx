@@ -21,7 +21,7 @@ export default function TeamMemberCard(props: {
       <div className="flex items-center justify-center gap-4">
         <>
           {props.isPending ? (
-            <ClockIcon className="size-5 stroke-yellow-500" />
+            <ClockIcon className="size-5 text-yellow-500" />
           ) : (
             <></>
           )}
@@ -29,7 +29,7 @@ export default function TeamMemberCard(props: {
         <>
           {props.isAdmin ? (
             <span>
-              <ExclamationTriangleIcon className="size-5 stroke-danger" />
+              <ExclamationTriangleIcon className="size-5 text-danger" />
             </span>
           ) : (
             <></>
