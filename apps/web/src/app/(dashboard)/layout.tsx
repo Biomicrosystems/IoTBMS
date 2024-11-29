@@ -31,7 +31,7 @@ export default function AdminLayout({
     userActiveTeam: userActiveTeam,
     userActiveTeamInfo: userActiveTeamInfo,
     userTeams: userTeams,
-    currentUser: user.session,
+    currentUser: user.session as any,
   };
 
   dispatch(updateDataBaseData(databaseData));

@@ -1,4 +1,3 @@
-import { invitations } from "@clerk/clerk-sdk-node";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
