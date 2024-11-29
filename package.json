@@ -3,11 +3,11 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev --filter docs",
-    "web": "turbo run dev --filter convex-iot-control"
+    "dev": "turbo dev",
+    "web": "turbo run dev --filter convex-iot-control",
+    "docs": "turbo run dev --filter dev"
   },
   "devDependencies": {
-    "@repo/typescript-config": "*",
     "prettier": "^3.2.5",
     "@repo/typescript-config": "*",
     "tailwindcss-animate": "^1.0.7",
