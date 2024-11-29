@@ -46,3 +46,4 @@ next-env.d.ts
 # Generated files
 .docusaurus
 .cache-loader
+.env.local

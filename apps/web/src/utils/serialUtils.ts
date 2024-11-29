@@ -2,6 +2,8 @@ import { storeInstace } from "../lib/store";
 import { addFilteredSerialData } from "../lib/features/filteredSerialData/filteredSerialDataSlice";
 import { createDataBlob } from "./FileProcessingUtils";
 import { addRawSerialData } from "lib/features/rawSerialData/rawSerialDataSlice";
+import { removeConectedDevice } from "lib/features/conectedDevices/conectedDevicesSlice";
+import { addUnexpectedDisconnect } from "lib/features/unexpectedDisconnect/unexpectedDisconnectSlice";
 
 /**
  * Requests access to a serial port from the user and attempts to open it using the specified baud rate.
@@ -23,11 +25,35 @@ import { addRawSerialData } from "lib/features/rawSerialData/rawSerialDataSlice"
  *   }
  * }
  */
-async function connectToSerial(baudRateSelected: number) {
-  const port = await navigator.serial.requestPort();
-  if (port) {
-    await port.open({ baudRate: baudRateSelected });
-    return port;
+async function connectToSerial(baudRateSelected: number, deviceId: string) {
+  try {
+    const port = await navigator.serial.requestPort();
+    if (port) {
+      await port.open({ baudRate: baudRateSelected });
+      port.addEventListener("disconnect", () => {
+        const devicesList = storeInstace.getState().conectedDevice;
+        const isConected = devicesList.find((item) => item.id === deviceId);
+        if (isConected) {
+          storeInstace.dispatch(addUnexpectedDisconnect(isConected));
+          storeInstace.dispatch(removeConectedDevice(deviceId));
+        }
+      });
+      return port;
+    }
+  } catch (e: any) {
+    if (e.name === "NotFoundError") {
+      throw new Error("No se seleccionó ningún puerto.");
+    } else if (e.name === "SecurityError") {
+      throw new Error("Permiso denegado o bloqueado por política del sistema.");
+    } else if (e.name === "InvalidStateError") {
+      throw new Error("El puerto ya se encuentra abierto");
+    } else if (e.name === "NetworkError") {
+      throw new Error(
+        "El puerto está siendo utilizado por otra aplicación o no está conectado.",
+      );
+    } else {
+      throw new Error("No se puede establecer la conexión.");
+    }
   }
 }
 /**
@@ -204,9 +230,7 @@ async function startReading(
           }
         }
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error: any) {}
     return "";
   }
 }

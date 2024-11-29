@@ -1,7 +1,5 @@
 "use client";
-import { Select } from "@headlessui/react";
-import { Card, LineChart } from "@tremor/react";
-import { ArrowDownTray } from "components/icons/ArrowDownTray";
+import { DownloadIcon } from "@radix-ui/react-icons";
 import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
@@ -15,6 +13,7 @@ import {
   getGraphData,
 } from "utils/FileProcessingUtils";
 import { deFormatUrl } from "utils/urlUtils";
+import DeviceGraph from "../device/DeviceGraph";
 const dateOptions: Intl.DateTimeFormatOptions = {
   year: "numeric", // Full year
   month: "long", // Full month name
@@ -118,23 +117,7 @@ export default function Historial() {
   });
   const graphData = getGraphData(filteredData);
   const cardData = getCardsData(filteredData);
-  const cardDataComponent = cardData?.map((value, index) => {
-    return (
-      <Card
-        className="mx-auto max-w-xs"
-        decoration="top"
-        decorationColor="indigo"
-        key={index}
-      >
-        <p className="text-xs lg:text-sm dark:text-dark-tremor-content">
-          {value.title}
-        </p>
-        <p className="text-2xl font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-          {value.data}
-        </p>
-      </Card>
-    );
-  });
+
   return (
     <section className="h-full overflow-y-scroll px-4 pb-40">
       <h2 className="my-0 mb-2 border-none bg-transparent px-0 font-semibold outline-none focus:ring-0 lg:text-4xl">
@@ -158,14 +141,6 @@ export default function Historial() {
         {(commands?.length as number) > 0 ? (
           <>
             <div>
-              <Select
-                name="function "
-                className=" mb-2 w-full bg-transparent lg:min-w-80"
-                value={currentCommand}
-                onChange={(e) => setCurrentCommand(e.target.value)}
-              >
-                {commandSelectors}
-              </Select>
               <p
                 className={`border-0 bg-transparent px-0 text-sm  italic text-lightText outline-none lg:text-base dark:text-darkText`}
               >
@@ -193,7 +168,7 @@ export default function Historial() {
                   window.URL.revokeObjectURL(url);
                 }}
               >
-                Descargar Datos <ArrowDownTray className="size-5" />
+                Descargar Datos <DownloadIcon className="size-5" />
               </button>
             ) : (
               <></>
@@ -220,28 +195,12 @@ export default function Historial() {
           <p className="mb-2 text-xs text-lightText lg:text-base dark:text-darkText">
             Esta sección muestra los datos configurados como “mostrar ultimo”
           </p>
-          <div className="mb-4 flex h-auto items-start justify-start gap-4 overflow-x-scroll p-2">
-            {cardDataComponent ? (
-              <>{cardDataComponent}</>
-            ) : (
-              <p>No hay datos configurados para mostrar su ultimo valor</p>
-            )}
-          </div>
+          <div className="mb-4 flex h-auto items-start justify-start gap-4 overflow-x-scroll p-2"></div>
           <h4 className="mb-2 text-sm lg:text-xl">Graficas</h4>
           <p className="mb-2 text-xs text-lightText lg:text-base dark:text-darkText">
             Esta sección muestra los datos configurados como “Graficar”{" "}
           </p>
-
-          {graphData.jsonResult.length > 0 ? (
-            <LineChart
-              data={graphData.jsonResult}
-              index="index"
-              categories={graphData.variableNames}
-              onValueChange={(v) => console.log(v)}
-            />
-          ) : (
-            <p>No hay datos configurados para graficar</p>
-          )}
+          <DeviceGraph graphData={graphData} />
         </>
       ) : (
         <></>

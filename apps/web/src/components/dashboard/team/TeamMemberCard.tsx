@@ -1,5 +1,4 @@
-import { Clock } from "components/icons/Clock";
-import { ExclamationTriangle } from "components/icons/ExclamationTriangle";
+import { ClockIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 export default function TeamMemberCard(props: {
   userName: string | undefined;
@@ -22,7 +21,7 @@ export default function TeamMemberCard(props: {
       <div className="flex items-center justify-center gap-4">
         <>
           {props.isPending ? (
-            <Clock className="size-5 stroke-yellow-500" />
+            <ClockIcon className="size-5 text-yellow-500" />
           ) : (
             <></>
           )}
@@ -30,7 +29,7 @@ export default function TeamMemberCard(props: {
         <>
           {props.isAdmin ? (
             <span>
-              <ExclamationTriangle className="size-5 stroke-danger" />
+              <ExclamationTriangleIcon className="size-5 text-danger" />
             </span>
           ) : (
             <></>

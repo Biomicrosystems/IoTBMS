@@ -135,46 +135,38 @@ function filterAndFormatData(data: string) {
  * //   variableNames: ["time", "temp"]
  * // }
  */
+// helper data structure
+type DataPoint = {
+  label: string;
+  data: number[];
+};
 
-function getGraphData(data: string[]) {
-  let filteredData = data.filter((data) => data.includes(">"));
-  let variableNames: string[] = [];
+function getGraphData(rawData: string[]) {
+  let filteredData = rawData.filter((data) => data.includes(">"));
+  const dataPoints: { [key: string]: DataPoint } = {};
+  let labels: string[] = [];
+  filteredData.forEach((item) => {
+    const trimmedItem = item.trim();
+    const [label, value] = trimmedItem.split(":");
 
-  filteredData.forEach((line, index) => {
-    variableNames.push(line.split(":")[0].replace(">", ""));
-  });
-  variableNames = [...new Set(variableNames)];
-  let joinFormatedData = [];
+    const cleanLabel = label.replace(">", "").trim();
+    const numericValue = parseFloat(value.trim());
 
-  for (let i = 0; i < filteredData.length; i++) {
-    let group = [];
-    for (let j = 0; j < variableNames.length; j++) {
-      if (i + j < filteredData.length) {
-        group.push(filteredData[i + j]);
-      }
+    labels.push(cleanLabel);
+    if (!dataPoints[cleanLabel]) {
+      dataPoints[cleanLabel] = {
+        label: cleanLabel,
+        data: [],
+      };
     }
-    if (group.length === variableNames.length) {
-      joinFormatedData.push(group.join(";"));
-    }
-    i += variableNames.length - 1;
-  }
 
-  let jsonResult: GraphItem[] = [];
-
-  joinFormatedData.forEach((item, index) => {
-    let obj: GraphItem = { index: index + 1 };
-    let pairs = item.split(";");
-    pairs.forEach((pair) => {
-      let match = pair.match(/>([^:]+):(.+)/);
-      if (match && variableNames.includes(match[1])) {
-        obj[match[1]] = Number(match[2]);
-      }
-    });
-    jsonResult.push(obj);
+    dataPoints[cleanLabel].data.push(numericValue);
   });
-
-  return { jsonResult, variableNames };
+  const cleanLabels = [...new Set(labels)];
+  return { dataPoints, cleanLabels };
 }
+
+export type graphData = ReturnType<typeof getGraphData>;
 
 /**
  * Parses a structured text input into a CSV formatted string. This function first identifies
@@ -292,6 +284,61 @@ function getCardsData(data: string[]) {
 
   return result;
 }
+
+function ejex(array: number[]) {
+  var lista = array.map((data, index) => (index % 2 === 0 ? data : null));
+  let filterList = lista.filter((data): data is number => data !== null);
+  return filterList;
+}
+function generarListaNumeros(filterList: number[]) {
+  let min = Math.min(...filterList);
+  let max = Math.max(...filterList);
+  var listaNumeros = [];
+  var st = String(min);
+  var st2 = String(max);
+  if (st.includes(".") || st2.includes(".")) {
+    for (let i = min; i <= max; i += 0.1) {
+      listaNumeros.push(i);
+    }
+    listaNumeros = listaNumeros.map((numero) => parseFloat(numero.toFixed(1)));
+  } else if (
+    st.length == 2 ||
+    (st2.length == 2 && !st.includes(".")) ||
+    !st2.includes(".")
+  ) {
+    for (let i = min; i <= max; i += 1) {
+      listaNumeros.push(i);
+    }
+  } else if (
+    st.length == 3 ||
+    (st2.length == 3 && !st.includes(".")) ||
+    !st2.includes(".")
+  ) {
+    for (let i = min; i <= max; i += 10) {
+      listaNumeros.push(i);
+    }
+  } else if (
+    st.length == 4 ||
+    (st2.length == 4 && !st.includes(".")) ||
+    !st2.includes(".")
+  ) {
+    for (let i = min; i <= max; i += 100) {
+      listaNumeros.push(i);
+    }
+  }
+  var analizar = listaNumeros;
+  var nums = [];
+  for (let pos = 0; pos < filterList.length; pos++) {
+    if (String(filterList[pos]).includes(".")) {
+      nums.push(filterList[pos]);
+    }
+  }
+  analizar.push(...nums);
+  analizar.sort((a, b) => a - b);
+  var listaFinal = analizar;
+  return listaFinal;
+}
+
 export {
   createDataBlob,
   fetchAndReadStreamData,
@@ -299,4 +346,6 @@ export {
   getGraphData,
   getDownloadData,
   getCardsData,
+  ejex,
+  generarListaNumeros,
 };

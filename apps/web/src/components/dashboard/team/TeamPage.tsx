@@ -3,9 +3,9 @@ import { api } from "convex/_generated/api";
 import { useQuery } from "convex/react";
 import { useAppSelector } from "lib/hooks";
 import TeamMemberCard from "./TeamMemberCard";
-import { Plus } from "components/icons/Plus";
 import { useState } from "react";
 import SearchNewMember from "./SearchNewMember";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 export default function TeamPage(props: { isAdmin: boolean }) {
   const [isSearchUser, setIsSearchUser] = useState(false);
@@ -67,7 +67,7 @@ export default function TeamPage(props: { isAdmin: boolean }) {
             }}
             className="flex w-full  items-center justify-center gap-4 rounded-md border border-lightText  p-4 text-sm text-lightText hover:bg-neutral-50 dark:border-darkText dark:text-darkText"
           >
-            <Plus className="size-5 stroke-lightText  dark:stroke-darkText " />
+            <PlusIcon className="size-5 text-lightText  dark:text-darkText " />
             Añadir nuevo integrante
           </button>
         ) : (

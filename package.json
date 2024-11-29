@@ -3,12 +3,14 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev --filter docs"
+    "dev": "turbo dev --filter docs",
+    "web": "turbo run dev --filter convex-iot-control"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
     "prettier": "^3.2.5",
     "@repo/typescript-config": "*",
+    "tailwindcss-animate": "^1.0.7",
     "turbo": "^1.13.3"
   },
   "engines": {
@@ -18,5 +20,16 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@hookform/resolvers": "^3.7.0",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-separator": "^1.1.0",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-switch": "^1.1.0",
+    "lucide-react": "^0.400.0",
+    "react-hook-form": "^7.52.1",
+    "zod": "^3.23.8"
+  }
 }

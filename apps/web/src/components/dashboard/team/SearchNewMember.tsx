@@ -1,11 +1,5 @@
 "use client";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptions,
-  Transition,
-} from "@headlessui/react";
+
 import { api } from "convex/_generated/api";
 import { Doc } from "convex/_generated/dataModel";
 import { useMutation } from "convex/react";
@@ -24,20 +18,6 @@ export default function SearchNewMember(props: {
     (state) => state.databaseData.userActiveTeam,
   );
   const getUsers = useMutation(api.user.getUserbyUserName);
-  const sendInvitation = useMutation(api.invitations.createInvitation);
-  const comboboxOptions = currentOptions.map((people) => {
-    return (
-      <ComboboxOption
-        key={people._id}
-        value={people}
-        className={
-          " flex cursor-default select-none items-center gap-2  px-3 py-1.5 data-[focus]:bg-black/10 dark:data-[focus]:bg-white/10"
-        }
-      >
-        {people.userName}
-      </ComboboxOption>
-    );
-  });
 
   return (
     <span
@@ -47,44 +27,8 @@ export default function SearchNewMember(props: {
         <p className="mb-4 text-sm ">
           Busca a nuevos miembros por nombre de usuario
         </p>
-        <Combobox
-          value={selectedPerson}
-          onChange={setSelectedPerson}
-          onClose={() => setCurrentOptions([])}
-        >
-          <span className="relative w-full">
-            <ComboboxInput
-              autoComplete="off"
-              placeholder="Nombre de usuario"
-              className={"  mb-2 w-full bg-transparent"}
-              displayValue={(item: Doc<"user">) => item?.userName}
-              onChange={async (e) => {
-                if (e.target.value.length >= 3) {
-                  const fountPeople = await getUsers({
-                    userName: e.target.value,
-                  });
-                  setCurrentOptions(fountPeople);
-                } else {
-                  setCurrentOptions([]);
-                }
-              }}
-            ></ComboboxInput>
-
-            <ComboboxOptions className="absolute top-full w-full overflow-hidden overflow-y-scroll rounded bg-white ring-1 ring-lightText empty:hidden dark:bg-dark dark:ring-darkText">
-              {comboboxOptions}
-            </ComboboxOptions>
-          </span>
-        </Combobox>
-
         <button
           disabled={!selectedPerson ? true : false}
-          onClick={() => {
-            sendInvitation({
-              userId: selectedPerson?.userId as string,
-              teamId: currentTeamId,
-            });
-            props.setIsSearchUser(false);
-          }}
           className="mb-4 h-10 rounded bg-accent p-2 text-sm text-white hover:bg-indigo-700 disabled:bg-indigo-300 disabled:text-zinc-100"
         >
           Enviar invitacion

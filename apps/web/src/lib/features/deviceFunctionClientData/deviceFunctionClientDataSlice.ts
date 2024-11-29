@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import type { deviceFunctionClientData } from "types/deviceFunctionClientData";
+import { deviceFunctionFormType } from "types/deviceFunctionClientData";
 
-const initialState: deviceFunctionClientData[] = [];
+const initialState: deviceFunctionFormType[] = [];
 
 const deviceFunctionClientDataSlice = createSlice({
   name: "deviceFunctionClientData",
@@ -9,7 +9,7 @@ const deviceFunctionClientDataSlice = createSlice({
   reducers: {
     addDeviceFunctionClientData: (
       state,
-      action: PayloadAction<deviceFunctionClientData>,
+      action: PayloadAction<deviceFunctionFormType>,
     ) => [...state, action.payload],
     cleanDeviceFunctionClientData: (state) => {
       let newArray = state.slice();
@@ -18,7 +18,7 @@ const deviceFunctionClientDataSlice = createSlice({
     },
     updateDeviceFunctionClientData: (
       state,
-      action: PayloadAction<deviceFunctionClientData>,
+      action: PayloadAction<deviceFunctionFormType>,
     ) => {
       let newArray = state.slice();
       let indexOfTheArray = newArray.findIndex(

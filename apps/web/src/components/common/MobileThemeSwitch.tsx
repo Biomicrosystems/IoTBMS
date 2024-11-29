@@ -1,11 +1,9 @@
 "use client";
-import { Moon } from "components/icons/Moon";
-import { Sun } from "components/icons/Sun";
-import { ChevronUpDown } from "components/icons/ChevronUpDown";
 
 import { useTheme } from "next-themes";
 
 import { useEffect, useState } from "react";
+import { CaretSortIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 export default function MobileThemeSwitch() {
   const [mounted, setMounted] = useState(false);
@@ -22,9 +20,9 @@ export default function MobileThemeSwitch() {
     <div className="flex items-center gap-1 lg:hidden">
       <span>
         {resolvedTheme === "light" ? (
-          <Sun className="size-5 stroke-lightText" />
+          <SunIcon className="size-5 text-lightText dark:text-darkText" />
         ) : (
-          <Moon className="size-5 stroke-darkText" />
+          <MoonIcon className="size-5 text-lightText dark:text-darkText" />
         )}
       </span>
       <select
@@ -37,7 +35,7 @@ export default function MobileThemeSwitch() {
         <option value="system">Sistema</option>
       </select>
       <span>
-        <ChevronUpDown className="size-5 stroke-lightText dark:stroke-darkText" />
+        <CaretSortIcon className="size-5 text-lightText dark:text-darkText" />
       </span>
     </div>
   );
