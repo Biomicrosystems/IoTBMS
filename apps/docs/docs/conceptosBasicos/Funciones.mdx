@@ -1,0 +1,41 @@
+---
+sidebar_position: 4
+---
+
+# Funciones
+
+Las funciones son la forma en como puedes comunicarte con tus dispositivos. Podrían ser solo una línea de comandos libre como se suele manejar en software como Arduino y PlatformIO, pero al ser dispositivos que van a ser usados por tus usuarios, te ofrecemos una alternativa de personalización y mejora de su experiencia al interactuar con tu sistema.
+
+Primero veamos de que está compuesta una función:
+
+- **Nombre**: Es el indicativo principal de tu función los usuarios la verán resaltada al ejecutarla.
+
+- **Descripción**: Permite al usuario tener una idea de que hace la función.
+
+- **Tipo de función**: Existen dos tipos de función los cuales cambian la interacción del usuario
+
+  - "Por comandos": Permite que el administrador ponga un comando pre-establecido al ejecutar la función. Este tipo es util cuando se trabaja con dispositivos con estados puntuales.
+  - "Libre": Deja que el usuario escriba cualquier cosa al momento de la ejecución del comando.
+
+- **Mensaje**: Lo que escribas aca aparecera como una instruccion de al momomento de que el usuario ejecute la funcion. Escribe que tipo de datos deberia escribir el usuario para que funcione correctamente.
+
+- **Envio de datos al usuario**: Si habilitas esta opción se enviaran los datos que genere tu microcontrolador, por ejemplo datos de un sensor.
+
+#### Configuraciones extra si se escoge una funcion de tipo comando.
+
+- **Recibe datos del usuario**: Si habilitas esta opción el usuario debe escoger o escribir algo antes de enviar la funcion al dispositivo. Si no la escoges la funcion se ejecutara de inmediato.
+
+- **Tipo de entrada**: Existen dos tipos de tipo de entrada, estas significan los valores permitidos que el usuario puede poner al ejecutar la funcion.
+
+  - "Numerica": Permite cualquier valor numerico.
+  - "Texto": Permite cualquier valor alfanumerico. Al momento de enviarse todo sera procesado como tipo texto.
+
+- **Formato**: Existen dos tipos de formato, estos representan como se le va a preguntar la información al usuario.
+
+  - "Escala": Permite al administrador seleccionar valores puntuales, el usuario podra seleccionar alguno de estos valores al momento de ejecutar la función.
+  - "Intervalo": Permite al administrador seleccionar un maximo o un minimo, el usuario puede escoger cualquier valor entre esos dos rangos. (solo disponible cuando se escoge un tipo de entrada numerico)
+
+- **Unidad**: Le permite al usuario saber en que unidad debe poner los datos, por ejemplo segundos o milisegundos.
+
+- **Intervalo Maximo**: Solo habilitado cuando se escoge el tipo de entrada numerica, es el valor maximo que el usuario puede escribir.
+- **Intervalo Minimo**: Solo habilitado cuando se escoge el tipo de entrada numerica, es el valor minimo que el usuario puede escribir.

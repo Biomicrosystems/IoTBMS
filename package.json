@@ -8,6 +8,7 @@
   "devDependencies": {
     "@repo/typescript-config": "*",
     "prettier": "^3.2.5",
+    "@repo/typescript-config": "*",
     "turbo": "^1.13.3"
   },
   "engines": {
