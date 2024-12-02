@@ -70,6 +70,11 @@ export default function MenuContent(props: { isAdmin: boolean }) {
               Miembros
             </li>
           </Link>
+          <Link href={`/${props.isAdmin ? "admin" : "user"}/teams `}>
+            <li className="py-2 hover:bg-black/10 lg:px-4 dark:hover:bg-white/10">
+              Equipos
+            </li>
+          </Link>
         </ul>
       </div>
       <MobileThemeSwitch />

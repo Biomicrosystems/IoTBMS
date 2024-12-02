@@ -49,6 +49,10 @@ export default function Topbar(props: {
   if (currentUrl.includes("team")) {
     navigationIndicator = "Equipo";
   }
+  if (currentUrl.includes("teams")) {
+    navigationIndicator = "Tus equipos";
+  }
+
   return (
     <nav className="flex w-full items-center justify-between px-4 py-4 lg:px-0 lg:py-6">
       <div className="flex items-center justify-center gap-2">
@@ -58,7 +62,7 @@ export default function Topbar(props: {
           </SheetTrigger>
           <SheetContent
             side="left"
-            className="data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r border-none bg-white data-[state=closed]:duration-150 data-[state=open]:duration-150 sm:max-w-sm dark:bg-dark"
+            className="inset-y-0 left-0 h-full w-3/4 border-r border-none bg-white data-[state=closed]:duration-150 data-[state=open]:duration-150 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm dark:bg-dark"
           >
             <MenuContent isAdmin={props.isAdmin} />
           </SheetContent>

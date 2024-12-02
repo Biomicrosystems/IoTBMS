@@ -25,6 +25,7 @@ export const createTeam = mutation({
       return;
     }
     await ctx.db.patch(userId._id, { activeTeam: newTeam });
+    return true;
   },
 });
 
