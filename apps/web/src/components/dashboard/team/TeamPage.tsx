@@ -28,6 +28,7 @@ export default function TeamPage(props: { isAdmin: boolean }) {
         userName={user}
         isPending={false}
         isAdmin={props.isAdmin}
+        teamId={currentTeamInfo._id}
       />
     );
   });
@@ -39,6 +40,7 @@ export default function TeamPage(props: { isAdmin: boolean }) {
         userName={user}
         isPending={true}
         isAdmin={props.isAdmin}
+        teamId={currentTeamInfo._id}
       />
     );
   });
@@ -52,6 +54,7 @@ export default function TeamPage(props: { isAdmin: boolean }) {
         <TeamMemberCard
           userName={usersInTeam?.adminUser}
           isPending={false}
+          teamId={currentTeamInfo._id}
           isAdmin={false}
         />
       </div>
@@ -65,7 +68,7 @@ export default function TeamPage(props: { isAdmin: boolean }) {
             onClick={() => {
               setIsSearchUser(true);
             }}
-            className="flex w-full  items-center justify-center gap-4 rounded-md border border-lightText  p-4 text-sm text-lightText hover:bg-neutral-50 dark:border-darkText dark:text-darkText"
+            className="flex w-full items-center  justify-center gap-4 rounded-md border border-lightText p-4 text-sm text-lightText transition fade-in-100  hover:bg-neutral-50 hover:bg-neutral-50 dark:border-darkText dark:border-darkText dark:text-darkText dark:hover:bg-white/10"
           >
             <PlusIcon className="size-5 text-lightText  dark:text-darkText " />
             Añadir nuevo integrante

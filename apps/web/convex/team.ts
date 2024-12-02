@@ -114,6 +114,28 @@ export const getTeamUsersInfo = query({
   },
 });
 
+export const removeUserFromTeam = mutation({
+  args: { userName: v.string(), teamId: v.id("team") },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("user")
+      .filter((q) => q.eq(q.field("userName"), args.userName))
+      .first();
+    if (!user) {
+      return;
+    }
+    const team = await ctx.db.get(args.teamId);
+    if (!team) {
+      return;
+    }
+    const teamUser = team.userRegistered;
+    const newTeamUsers = teamUser.filter(
+      (userData) => userData !== user.userId,
+    );
+    await ctx.db.patch(team._id, { userRegistered: newTeamUsers });
+    return true;
+  },
+});
 //----------------------------------------
 //  Server Actions for usage with middleware
 //----------------------------------------
