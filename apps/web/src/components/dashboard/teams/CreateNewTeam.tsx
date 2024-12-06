@@ -35,7 +35,10 @@ export default function CreateNewTeam(props: {
       className={`fixed left-0 top-0  z-10 flex h-screen w-screen items-center justify-center bg-black/15 px-4 transition-all dark:bg-black/65`}
     >
       <div className="flex h-fit w-screen flex-col  rounded-lg bg-white px-5 py-8 lg:w-500px dark:bg-dark">
-        <p className="mb-4 text-sm ">Crea un nuevo equipo</p>
+        <p className="mb-4 text-xl font-bold ">Crea un nuevo equipo</p>
+        <p className="mb-4 text-sm text-lightText">
+          Una vez crees el equipo pasara a ser tu equipo activo automaticamente
+        </p>
         <Form {...form}>
           <form
             className="relative mb-8 flex w-full flex-col gap-4 "

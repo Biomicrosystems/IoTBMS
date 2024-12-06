@@ -28,18 +28,19 @@ import { addUnexpectedDisconnect } from "lib/features/unexpectedDisconnect/unexp
 async function connectToSerial(baudRateSelected: number, deviceId: string) {
   try {
     const port = await navigator.serial.requestPort();
-    if (port) {
-      await port.open({ baudRate: baudRateSelected });
-      port.addEventListener("disconnect", () => {
-        const devicesList = storeInstace.getState().conectedDevice;
-        const isConected = devicesList.find((item) => item.id === deviceId);
-        if (isConected) {
-          storeInstace.dispatch(addUnexpectedDisconnect(isConected));
-          storeInstace.dispatch(removeConectedDevice(deviceId));
-        }
-      });
-      return port;
+    if (!port) {
+      return;
     }
+    await port.open({ baudRate: baudRateSelected, bufferSize: 16777216 });
+    port.addEventListener("disconnect", () => {
+      const devicesList = storeInstace.getState().conectedDevice;
+      const isConected = devicesList.find((item) => item.id === deviceId);
+      if (isConected) {
+        storeInstace.dispatch(addUnexpectedDisconnect(isConected));
+        storeInstace.dispatch(removeConectedDevice(deviceId));
+      }
+    });
+    return port;
   } catch (e: any) {
     if (e.name === "NotFoundError") {
       throw new Error("No se seleccionó ningún puerto.");
@@ -147,12 +148,27 @@ async function closePort(
   reader: ReadableStreamDefaultReader | undefined,
 ) {
   if (!port || !reader) {
-    throw new Error("No hay un puerto seleccionado");
+    throw new Error("No port selected");
   }
-  reader.cancel();
+
+  try {
+    // Cancel the reader to stop data flow
+    await reader.cancel();
+  } catch (error) {
+    console.error("Error canceling reader:", error);
+  }
+
+  // Release the lock on the reader
   reader.releaseLock();
-  await port.close();
+
+  try {
+    // Close the port
+    await port.close();
+  } catch (error) {
+    console.error("Error closing port:", error);
+  }
 }
+
 /**
  * Continuously reads data from a given serial port and processes it based on predefined triggers.
  * This function listens for data transmitted over a serial connection, accumulating it until a newline
@@ -230,7 +246,11 @@ async function startReading(
           }
         }
       }
-    } catch (error: any) {}
+    } catch (error: any) {
+      alert(
+        `Error por favor desconecte el microcontrolador del dispositivo y vuelva a intentarlo`,
+      );
+    }
     return "";
   }
 }

@@ -112,12 +112,7 @@ export default function Device() {
   }, [devicesList]);
   useEffect(() => {
     if (selectedPort !== undefined) {
-      const data: conectedDeviceData = {
-        id: deviceId,
-        device: selectedPort,
-        reader: reader as ReadableStreamDefaultReader,
-      };
-      dispatch(addConectedDevice(data));
+      return;
     } else {
       dispatch(cleanRawSerialData(deviceId));
     }
@@ -255,6 +250,20 @@ export default function Device() {
 
                         setSelectedPort(serialPort);
                         setReader(reader);
+                        if (!serialPort || !reader) {
+                          toast({
+                            title: "¡Algo Salio Mal!",
+                            description: "Vuelve a intentarlo",
+                            variant: "destructive",
+                          });
+                          return;
+                        }
+                        const data: conectedDeviceData = {
+                          id: deviceId,
+                          device: serialPort,
+                          reader: reader,
+                        };
+                        dispatch(addConectedDevice(data));
                         startReading(serialPort, reader, deviceId);
                         toast({
                           description: "Dispositivo Conectado correctamente",
@@ -268,8 +277,8 @@ export default function Device() {
                         });
                       }
                     } else {
-                      await closePort(selectedPort, reader);
                       dispatch(removeConectedDevice(deviceId));
+                      await closePort(selectedPort, reader);
                       setReader(undefined);
                       setSelectedPort(undefined);
                       setDeviceInactive({ deviceId: deviceId as Id<"device"> });

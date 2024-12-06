@@ -28,7 +28,7 @@ export default function TeamsPage(props: { isAdmin: boolean }) {
             onClick={() => {
               setCreatingTeam(true);
             }}
-            className="flex w-full items-center  justify-center gap-4 rounded-md border border-lightText p-4 text-sm text-lightText transition fade-in-100  hover:bg-neutral-50 hover:bg-neutral-50 dark:border-darkText dark:border-darkText dark:text-darkText dark:hover:bg-white/10"
+            className="flex w-full items-center  justify-center gap-4 rounded-md border border-lightText p-4 text-sm text-lightText transition fade-in-100   hover:bg-neutral-50  dark:border-darkText dark:text-darkText dark:hover:bg-white/10"
           >
             <PlusIcon className="size-5 text-lightText  dark:text-darkText " />
             Crear un nuevo Equipo
