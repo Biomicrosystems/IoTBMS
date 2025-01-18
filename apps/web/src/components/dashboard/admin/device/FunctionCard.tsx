@@ -22,7 +22,10 @@ export default function FunctionCard(props: {
       <span className="flex h-full items-end justify-end">
         <button
           onClick={() => {
-            if (props.functionData.userInfo) {
+            if (
+              props.functionData.userInfo ||
+              props.functionData.typeOfFunction == "FREE"
+            ) {
               setSendConfirmation(true);
             } else {
               try {
@@ -46,15 +49,13 @@ export default function FunctionCard(props: {
         </button>
       </span>
 
-      {sendConfirmation ? (
+      {sendConfirmation && (
         <ExecutionAlert
           setSendConfirmation={setSendConfirmation}
           functionData={props.functionData}
           serialPort={props.serialPort}
           isAdmin={true}
         />
-      ) : (
-        <></>
       )}
     </div>
   );

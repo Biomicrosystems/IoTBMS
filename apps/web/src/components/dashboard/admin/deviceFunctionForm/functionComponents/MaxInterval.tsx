@@ -25,6 +25,7 @@ export default function MaxInterval(props: {
               className="text-sm focus:border-accent lg:text-base dark:bg-dark"
               {...field}
               autoComplete="off"
+              type="number"
             />
           </FormControl>
         </FormItem>

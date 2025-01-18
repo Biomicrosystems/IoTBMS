@@ -59,8 +59,8 @@ export default function EditView(props: {
         unit: data.unit,
         symbol: "",
         format: data.format,
-        maxInterval: data.maxInterval,
-        minInterval: data.minInterval,
+        maxInterval: Number(data.maxInterval),
+        minInterval: Number(data.minInterval),
         scaleData: scaleData,
         message: data.message,
         sendData: data.sendData,
@@ -80,8 +80,8 @@ export default function EditView(props: {
         unit: data.unit,
         symbol: "",
         format: data.format,
-        maxInterval: data.maxInterval,
-        minInterval: data.minInterval,
+        maxInterval: Number(data.maxInterval),
+        minInterval: Number(data.minInterval),
         scaleData: scaleData,
         message: data.message,
         sendData: data.sendData,
@@ -132,8 +132,8 @@ function createDeviceFunctionData(data: Doc<"deviceFunction">[] | undefined) {
     if (
       !functionData.userTypeOfEntry ||
       !functionData.format ||
-      functionData.maxInterval !== 0 ||
-      functionData.minInterval !== 0 ||
+      functionData.maxInterval == undefined ||
+      functionData.minInterval == undefined ||
       !functionData.scaleData ||
       functionData.unit === undefined
     ) {
@@ -152,8 +152,8 @@ function createDeviceFunctionData(data: Doc<"deviceFunction">[] | undefined) {
       userTypeOfEntry: functionData.userTypeOfEntry as typeOfEntry,
       unit: functionData.unit,
       format: functionData.format as typeOfFormat,
-      maxInterval: functionData.maxInterval,
-      minInterval: functionData.minInterval,
+      maxInterval: functionData.maxInterval.toString(),
+      minInterval: functionData.minInterval.toString(),
       scaleData: scaleData,
       message: functionData.message,
       sendData: functionData.sendData,
