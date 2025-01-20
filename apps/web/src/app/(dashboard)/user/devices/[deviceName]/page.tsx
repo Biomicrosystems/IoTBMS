@@ -7,7 +7,6 @@ import {
   fetchAndReadStreamData,
   filterAndFormatData,
   getCardsData,
-  getDownloadData,
   getGraphData,
 } from "utils/FileProcessingUtils";
 import { deFormatUrl } from "utils/urlUtils";
@@ -19,8 +18,8 @@ import { Id } from "convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 
 import LastCheckedOnline from "components/dashboard/user/LastCheckedOnline";
-import { DownloadIcon } from "@radix-ui/react-icons";
 import DeviceGraph from "components/dashboard/device/DeviceGraph";
+import DowloadButton from "components/dashboard/user/DownloadButton";
 
 export default function Device() {
   const [recievedData, setRecievedData] = useState("");
@@ -68,10 +67,10 @@ export default function Device() {
   const graphData = getGraphData(filteredData);
   const cardData = getCardsData(filteredData);
 
-  const cardDataComponent = cardData?.map((value, index) => {
+  /* const cardDataComponent = cardData?.map((value, index) => {
     return <></>;
   });
-
+    */
   return (
     <section className="h-full overflow-y-scroll px-4 pb-40">
       <p
@@ -101,32 +100,8 @@ export default function Device() {
       <div className="flex items-center justify-between">
         <h3 className="text-xl  font-medium lg:text-2xl">Datos Recibidos</h3>
 
-        {filteredData.length > 0 ? (
-          <button
-            className="flex w-fit items-center justify-center gap-2 rounded p-2 text-white lg:bg-accent"
-            onClick={() => {
-              const downloadData = getDownloadData(recievedData);
-              const csvBlob = new Blob([downloadData], {
-                type: "text/csv;charset=utf-8",
-              });
-              const url = window.URL.createObjectURL(csvBlob);
-
-              const link = document.createElement("a");
-              link.href = url;
-              link.download = `${deviceId}.csv`;
-
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-
-              window.URL.revokeObjectURL(url);
-            }}
-          >
-            <p className="hidden shrink-0 lg:block">Descargar Datos</p>
-            <DownloadIcon className=" size-5 shrink-0 stroke-lightText lg:stroke-white dark:stroke-darkText" />
-          </button>
-        ) : (
-          <></>
+        {filteredData.length > 0 && (
+          <DowloadButton recievedData={recievedData} deviceId={deviceId} />
         )}
       </div>
       <p className="mb-2 text-xs text-lightText lg:text-base dark:text-darkText">
@@ -140,6 +115,8 @@ export default function Device() {
       <div className="dark:border-darkTex relative mb-4  max-h-32 min-h-20 w-full overflow-y-scroll rounded border border-lightText p-2 text-sm">
         <ul>{consoleData}</ul>
       </div>
+
+      {/*
       <h4 className="mb-2 text-sm lg:text-xl">Últimos datos recibidos</h4>
       <p className="mb-2 text-xs text-lightText lg:text-base dark:text-darkText ">
         Esta sección muestra los datos configurados como “mostrar ultimo”
@@ -149,8 +126,9 @@ export default function Device() {
           <>{cardDataComponent}</>
         ) : (
           <p>No hay datos configurados para mostrar su ultimo valor</p>
-        )}
+        ) }
       </div>
+       */}
       <h4 className="mb-2 text-sm lg:text-xl">Graficas</h4>
       <p className="mb-2 text-xs text-lightText lg:text-base dark:text-darkText">
         Esta sección muestra los datos configurados como “Graficar”{" "}

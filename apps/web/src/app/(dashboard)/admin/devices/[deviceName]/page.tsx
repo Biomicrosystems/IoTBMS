@@ -92,7 +92,7 @@ export default function Device() {
   const formattedData = filterAndFormatData(textSerialData.join(""));
 
   const graphData = getGraphData(formattedData);
-  const cardData = getCardsData(formattedData);
+  //const cardData = getCardsData(formattedData);
 
   // Effects
 
@@ -110,6 +110,7 @@ export default function Device() {
       }
     }
   }, [devicesList]);
+
   useEffect(() => {
     if (selectedPort !== undefined) {
       return;
@@ -122,15 +123,10 @@ export default function Device() {
   const serialDataCard = formattedData.map((data, index) => {
     return <ul key={index}>{data}</ul>;
   });
-  const cardDataComponent = cardData?.map((value, index) => {});
+  // const cardDataComponent = cardData?.map((value, index) => {});
   const functionscom = functions?.map((e, i) => {
     return <FunctionCard functionData={e} key={i} serialPort={selectedPort} />;
   });
-
-  const array = [
-    -100, 1000, -30, 500, -29.8, 150, 300, 1000, 200, 500, 600, 150,
-  ];
-  const ejexData = ejex(array);
 
   return (
     <section className="h-full overflow-y-scroll px-4 pb-40">
@@ -168,6 +164,7 @@ export default function Device() {
           <div className="dark:border-darkTex relative mb-4 max-h-32 min-h-20 w-full overflow-y-scroll rounded border border-lightText p-2 text-sm">
             <ul>{serialDataCard}</ul>
           </div>
+          {/*
           <h4 className="mb-2 text-sm lg:text-xl">Últimos datos recibidos</h4>
           <p className="mb-4 text-xs italic text-lightText lg:text-sm dark:text-darkText">
             Para ver datos en esta seccion envialos con el formato
@@ -179,7 +176,7 @@ export default function Device() {
             ) : (
               <p>No hay datos configurados para mostrar su ultimo valor</p>
             )}
-          </div>
+          </div>*/}
           <h4 className="mb-2 text-sm lg:text-xl">Graficas</h4>
           <p className=" text-xs italic text-lightText lg:text-sm dark:text-darkText ">
             Para ver datos en esta seccion envialos con el formato

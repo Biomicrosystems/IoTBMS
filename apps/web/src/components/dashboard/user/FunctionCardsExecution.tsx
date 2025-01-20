@@ -22,7 +22,10 @@ export default function FunctionCardExecution(props: {
       <span className="flex h-full items-end justify-end">
         <button
           onClick={() => {
-            if (props.functionData.userInfo) {
+            if (
+              props.functionData.userInfo ||
+              props.functionData.typeOfFunction == "FREE"
+            ) {
               setSendConfirmation(true);
             } else {
               try {

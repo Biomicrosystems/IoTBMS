@@ -30,6 +30,7 @@ interface CardItem {
 
 function createDataBlob(deviceId: string) {
   const data = storeInstace.getState().filteredSerialData;
+  console.log(data);
 
   const filteredData = data.map((value) => {
     if (value.id.includes(deviceId)) {
@@ -37,6 +38,7 @@ function createDataBlob(deviceId: string) {
     }
   });
 
+  console.log(filteredData);
   const newState = data.filter((value) => !value.id.includes(deviceId));
   storeInstace.dispatch(updateFilteredSerialData(newState));
   if (!filteredData) {
@@ -72,7 +74,7 @@ function createDataBlob(deviceId: string) {
  */
 async function fetchAndReadStreamData(url: string) {
   const resonse = await fetch(url);
-  const reader = await resonse.body?.getReader();
+  const reader = resonse.body?.getReader();
   let data = "";
   if (!reader) {
     return "No hay datos";
@@ -103,6 +105,7 @@ async function fetchAndReadStreamData(url: string) {
  */
 function filterAndFormatData(data: string) {
   let lines = data.split("\n");
+  lines = data.split("\r");
   lines = lines.filter((line) => line.trim() !== "");
   let allValues: string[] = [];
 
@@ -186,8 +189,7 @@ export type graphData = ReturnType<typeof getGraphData>;
  * // Output:
  * // "time,temperature\n12,30\n13,33"
  */
-
-function getDownloadData(input: string) {
+function getDownloadData(input: string, delimiter: string, decimal: string) {
   let lines = input.split("\n").filter((line) => line.trim() !== "");
 
   let variableNames: string[] = [];
@@ -202,26 +204,36 @@ function getDownloadData(input: string) {
   lines.slice(startIndex).forEach((line, index) => {
     const parts = line.split(",");
     if (index === 0) {
+      // Extract variable names
       variableNames = parts.map((part) => {
         let key = part.split(":")[0].trim();
-        if (key.startsWith(">")) {
-          key = key.substring(1);
-        }
-        if (key.startsWith("<")) {
+        if (key.startsWith(">") || key.startsWith("<")) {
           key = key.substring(1);
         }
         return key;
       });
+    } else {
+      // Extract data and replace the decimal point
+      const data = parts.map((part) => {
+        const value = part.split(":")[1];
+        if (value) {
+          // Replace the decimal point if needed
+          return value.trim().replace(".", decimal);
+        }
+        return "";
+      });
+      dataRows.push(data.join(delimiter));
     }
-    const data = parts.map((part) => part.split(":")[1]);
-    dataRows.push(data.join(","));
   });
 
-  const data = variableNames.join(",") + "\n" + dataRows.join("\n");
+  // Combine variable names and data rows with the selected delimiter
+  const data = variableNames.join(delimiter) + "\n" + dataRows.join("\n");
 
   return data;
 }
+
 /**
+ *
  * Extracts and formats data from an array of strings to create a structured list of card items.
  * Each card item is derived from string entries containing a special character ("<"). The function
  * first filters for relevant data lines, extracts variable names, and then formats the last valid
