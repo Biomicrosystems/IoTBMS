@@ -151,7 +151,7 @@ export default function Historial() {
               <button
                 className="flex h-11 items-center justify-center gap-2 rounded bg-accent p-2 text-white"
                 onClick={() => {
-                  const downloadData = getDownloadData(recievedData);
+                  const downloadData = getDownloadData(recievedData, ",", ".");
                   const csvBlob = new Blob([downloadData], {
                     type: "text/csv;charset=utf-8",
                   });
