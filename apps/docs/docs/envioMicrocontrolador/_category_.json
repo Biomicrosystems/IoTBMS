@@ -1,0 +1,8 @@
+{
+  "label": "Envio de comandos y comunicación",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Aprende a enviar comandos a tu microcontrolador, entiende como funciona la comunicación"
+  }
+}

@@ -1,0 +1,35 @@
+---
+sidebar_position: 1
+---
+
+# Visión General
+
+Esta aplicación está diseñada para facilitar la creación de **laboratorios remotos** (remote labs), permitiendo a los usuarios interactuar con dispositivos físicos desde cualquier lugar del mundo. La comunicación entre la aplicación y el microcontrolador se realiza a través del **puerto serial**, utilizando una conexión por **cable USB** o **Bluetooth**.
+
+### ¿Cómo Funciona?
+
+1. **Conexión Serial**:  
+   La aplicación se conecta al microcontrolador mediante el puerto serial. Esto significa que no es necesario utilizar módulos WiFi ni configurar redes IoT complejas. Cualquier microcontrolador que soporte comunicación serial (como Arduino, ESP32, STM32, etc.) puede ser utilizado.
+
+2. **Redirección de Comandos**:  
+   Los comandos creados por los usuarios en la aplicación son enviados al microcontrolador a través de esta conexión serial. Aunque el microcontrolador debe estar físicamente conectado a la computadora que ejecuta la aplicación, los usuarios pueden enviar comandos desde **cualquier red en el mundo** gracias a la infraestructura de la aplicación.
+
+- No necesitas configurar módulos WiFi ni preocuparte por la conectividad de red del microcontrolador.
+- Los usuarios pueden interactuar con el microcontrolador desde cualquier lugar, siempre que la computadora esté conectada a Internet.
+- Puedes usar cualquier microcontrolador que soporte comunicación serial, sin importar la marca o modelo.
+
+---
+
+### Ejemplo de Flujo de Trabajo
+
+1. **Conexión Física**:  
+   Conecta el microcontrolador a la computadora mediante un cable USB o un módulo Bluetooth.
+
+2. **Creación de Comandos**:  
+   Los usuarios configuran funciones en la aplicación, definiendo los comandos que se enviarán al microcontrolador.
+
+3. **Ejecución Remota**:  
+   Desde cualquier red, los usuarios pueden ejecutar las funciones configuradas. La aplicación redirige los comandos al microcontrolador a través del puerto serial.
+
+4. **Respuesta del Microcontrolador**:  
+   Si el microcontrolador está programado para enviar datos de vuelta (por ejemplo, lecturas de sensores), estos serán enviados a la aplicación y mostrados al usuario.

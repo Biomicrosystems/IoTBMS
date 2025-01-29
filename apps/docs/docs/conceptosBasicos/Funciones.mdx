@@ -2,40 +2,128 @@
 sidebar_position: 4
 ---
 
+import functions from "./functions.mp4";
+
 # Funciones
 
-Las funciones son la forma en como puedes comunicarte con tus dispositivos. Podrían ser solo una línea de comandos libre como se suele manejar en software como Arduino y PlatformIO, pero al ser dispositivos que van a ser usados por tus usuarios, te ofrecemos una alternativa de personalización y mejora de su experiencia al interactuar con tu sistema.
+Las **funciones** son la forma en que puedes comunicarte con tus dispositivos. Aunque podrían ser simplemente líneas de comandos libres, como se maneja en software como Arduino o PlatformIO, entendemos que estos dispositivos serán utilizados por tus usuarios. Por ello, te ofrecemos una alternativa que permite personalizar y mejorar la experiencia de interacción con tu sistema.
 
-Primero veamos de que está compuesta una función:
+A continuación, exploraremos los componentes principales de una función y cómo configurarla.
 
-- **Nombre**: Es el indicativo principal de tu función los usuarios la verán resaltada al ejecutarla.
+---
 
-- **Descripción**: Permite al usuario tener una idea de que hace la función.
+## Componentes de una Función
 
-- **Tipo de función**: Existen dos tipos de función los cuales cambian la interacción del usuario
+### 1. **Nombre**
 
-  - "Por comandos": Permite que el administrador ponga un comando pre-establecido al ejecutar la función. Este tipo es util cuando se trabaja con dispositivos con estados puntuales.
-  - "Libre": Deja que el usuario escriba cualquier cosa al momento de la ejecución del comando.
+El nombre es el identificador principal de tu función. Es lo primero que los usuarios verán y estará resaltado al ejecutarla. Asegúrate de que sea claro y representativo de la acción que realiza.
 
-- **Mensaje**: Lo que escribas aca aparecera como una instruccion de al momomento de que el usuario ejecute la funcion. Escribe que tipo de datos deberia escribir el usuario para que funcione correctamente.
+### 2. **Descripción**
 
-- **Envio de datos al usuario**: Si habilitas esta opción se enviaran los datos que genere tu microcontrolador, por ejemplo datos de un sensor.
+La descripción permite al usuario entender qué hace la función. Proporciona una breve explicación que sea fácil de comprender.
 
-#### Configuraciones extra si se escoge una funcion de tipo comando.
+### 3. **Tipo de Función**
 
-- **Recibe datos del usuario**: Si habilitas esta opción el usuario debe escoger o escribir algo antes de enviar la funcion al dispositivo. Si no la escoges la funcion se ejecutara de inmediato.
+Existen dos tipos de funciones, y cada uno define cómo interactuará el usuario con el dispositivo:
 
-- **Tipo de entrada**: Existen dos tipos de tipo de entrada, estas significan los valores permitidos que el usuario puede poner al ejecutar la funcion.
+- **Por comandos**: Permite al administrador establecer un comando predefinido que se ejecutará al activar la función. Este tipo es útil para dispositivos con estados específicos o acciones puntuales.
+- **Libre**: Permite al usuario escribir cualquier dato al momento de ejecutar la función. Es ideal para casos en los que se necesita flexibilidad en la entrada.
 
-  - "Numerica": Permite cualquier valor numerico.
-  - "Texto": Permite cualquier valor alfanumerico. Al momento de enviarse todo sera procesado como tipo texto.
+### 4. **Mensaje**
 
-- **Formato**: Existen dos tipos de formato, estos representan como se le va a preguntar la información al usuario.
+El mensaje es una instrucción que aparecerá cuando el usuario ejecute la función. Aquí puedes indicar qué tipo de datos debe ingresar el usuario para que la función se ejecute correctamente. Por ejemplo: "Introduce un valor entre 1 y 100" o "Escribe el nombre del dispositivo".
 
-  - "Escala": Permite al administrador seleccionar valores puntuales, el usuario podra seleccionar alguno de estos valores al momento de ejecutar la función.
-  - "Intervalo": Permite al administrador seleccionar un maximo o un minimo, el usuario puede escoger cualquier valor entre esos dos rangos. (solo disponible cuando se escoge un tipo de entrada numerico)
+### 5. **Envío de Datos al Usuario**
 
-- **Unidad**: Le permite al usuario saber en que unidad debe poner los datos, por ejemplo segundos o milisegundos.
+Si habilitas esta opción, los datos generados por tu microcontrolador (como lecturas de sensores) se enviarán al usuario. Esto es útil para proporcionar retroalimentación o resultados en tiempo real.
 
-- **Intervalo Maximo**: Solo habilitado cuando se escoge el tipo de entrada numerica, es el valor maximo que el usuario puede escribir.
-- **Intervalo Minimo**: Solo habilitado cuando se escoge el tipo de entrada numerica, es el valor minimo que el usuario puede escribir.
+---
+
+## Configuraciones Adicionales para Funciones de Tipo Comando
+
+Si seleccionas una función de tipo **Por comandos**, tendrás acceso a configuraciones adicionales que te permitirán personalizar aún más la interacción:
+
+### 1. **Comando**
+
+El comando es la instrucción específica que se enviará al microcontrolador a través del puerto serial para ejecutar la función. Este campo debe contener el texto exacto que el dispositivo espera recibir para realizar la acción correspondiente.
+
+> **Nota:** Asegúrate de que el comando coincida con lo que el microcontrolador está programado para interpretar. Por ejemplo, si el microcontrolador espera el comando `ON` para encender un LED, este debe ser el valor configurado aquí.
+
+### 2. **Recibe Datos del Usuario**
+
+- Si habilitas esta opción, el usuario deberá ingresar o seleccionar un valor antes de enviar la función al dispositivo.
+- Si no la habilitas, la función se ejecutará de inmediato sin requerir datos adicionales.
+
+### 3. **Tipo de Entrada**
+
+El tipo de entrada define los valores permitidos que el usuario puede ingresar al ejecutar la función. Existen dos opciones:
+
+- **Numérica**: Permite cualquier valor numérico.
+- **Texto**: Permite cualquier valor alfanumérico. Todos los datos ingresados se procesarán como texto al enviarse.
+
+### 4. **Formato**
+
+El formato determina cómo se solicitará la información al usuario. Hay dos opciones disponibles:
+
+- **Escala**: Permite al administrador definir valores específicos. El usuario podrá seleccionar uno de estos valores al ejecutar la función.
+- **Intervalo**: Permite al administrador establecer un rango (mínimo y máximo). El usuario podrá ingresar cualquier valor dentro de este rango. _(Nota: Esta opción solo está disponible cuando el tipo de entrada es numérico)._
+
+### 5. **Unidad**
+
+La unidad ayuda al usuario a entender en qué formato debe ingresar los datos. Por ejemplo: segundos, milisegundos, grados Celsius, etc.
+
+### 6. **Intervalo Máximo**
+
+_(Solo disponible para entradas numéricas)_  
+Define el valor máximo que el usuario puede ingresar.
+
+### 7. **Intervalo Mínimo**
+
+_(Solo disponible para entradas numéricas)_  
+Define el valor mínimo que el usuario puede ingresar.
+
+---
+
+## Ejemplo de Configuración de una Función
+
+Para ilustrar cómo configurar una función, aquí tienes un ejemplo práctico:
+
+```json
+{
+  "nombre": "Encender LED",
+  "descripcion": "Activa el LED conectado al dispositivo.",
+  "tipoFuncion": "Por comandos",
+  "comando": "A",
+  "mensaje": "Escribe 'ON' para encender el LED o 'OFF' para apagarlo.",
+  "envioDatosUsuario": false,
+  "recibeDatosUsuario": true,
+  "tipoEntrada": "Texto",
+  "formato": "Escala",
+  "valoresEscala": ["ON", "OFF"],
+  "unidad": NA
+}
+```
+
+**Cuando las funciones reciben datos del usuario lo que se va a mandar al microcontrolador es el comando + los datos del usuario.
+En este ejemplo si un usuario selecciona `ON` el comando enviado sera `AON`**
+
+<div
+  style={{
+    border: "1px #e2e8f0 solid",
+    display: "flex",
+    justifyContent: "center",
+  }}
+>
+  <video
+    src={functions}
+    autoPlay={true}
+    loop
+    style={{
+      border: "black 1px",
+      width: "90%",
+      height: "auto",
+      aspectRatio: "450/253",
+    }}
+    controls
+  ></video>
+</div>

@@ -5,7 +5,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "web": "turbo run dev --filter convex-iot-control",
-    "docs": "turbo run dev --filter dev"
+    "docs": "turbo run dev --filter docs"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
