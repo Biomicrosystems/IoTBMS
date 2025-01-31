@@ -1,0 +1,89 @@
+---
+sidebar_position: 2
+---
+
+# Roadmap: Futuras Implementaciones
+
+En esta sección se describen las futuras implementaciones sugeridas para el proyecto. Estas mejoras están diseñadas para expandir las capacidades de la plataforma, simplificar la interacción con los microcontroladores y ofrecer nuevas funcionalidades avanzadas.
+
+---
+
+## 1. Plataforma Remota Completa con Microcontroladores WiFi
+
+### Descripción
+
+El objetivo es implementar una plataforma completamente remota que permita la comunicación directa con microcontroladores equipados con módulos WiFi. Esto eliminará la necesidad de que los dispositivos estén conectados físicamente a una computadora, permitiendo un acceso más flexible y remoto.
+
+### Requisitos
+
+- **Librería para Microcontroladores**:  
+  Se desarrollará una librería que simplifique la configuración de red y la comunicación con la plataforma. Esto permitirá a los desarrolladores centrarse en la construcción de sus dispositivos, reduciendo la complejidad asociada al IoT.
+
+### Beneficios
+
+- Reducción de la dependencia de conexiones físicas.
+- Mayor flexibilidad para laboratorios remotos y proyectos distribuidos.
+- Simplificación del desarrollo de dispositivos IoT.
+
+### Desafíos
+
+- Garantizar la compatibilidad con una amplia gama de microcontroladores.
+- Mantener la simplicidad de uso para los desarrolladores.
+
+---
+
+## 2. Recepción de Datos en Tiempo Real
+
+### Descripción
+
+Actualmente, los datos enviados por los microcontroladores en **Modo Usuario** se procesan y se envían al usuario después de que se recibe la palabra de control **`finish`**. El objetivo de esta implementación es permitir la recepción y visualización de datos en tiempo real, incluso en el **Modo Usuario**.
+
+### Requisitos
+
+- **Optimización de la Infraestructura**:  
+  Se requiere una solución que permita la transmisión de datos en tiempo real sin incurrir en costos adicionales, manteniendo la naturaleza de bajo costo del proyecto.
+- **Compatibilidad con la Plataforma Actual**:  
+  La implementación debe integrarse sin afectar las funcionalidades existentes.
+
+### Beneficios
+
+- Mejora de la experiencia del usuario al permitir la visualización inmediata de los datos.
+- Mayor utilidad para aplicaciones que requieren monitoreo en tiempo real.
+
+### Desafíos
+
+- Implementar una solución gratuita o de muy bajo costo para la transmisión en tiempo real.
+- Superar las limitaciones de red y hardware asociadas a la naturaleza económica del proyecto.
+
+---
+
+## 3. Subrutinas y Soporte para Instrucciones Complejas
+
+### Descripción
+
+Esta implementación tiene como objetivo agregar soporte para subrutinas y conjuntos de instrucciones más complejos en los microcontroladores. Esto permitirá a los usuarios definir flujos de trabajo automatizados y ejecutar rutinas avanzadas directamente desde la plataforma.
+
+### Requisitos
+
+- **Soporte para Nuevas Frases de Control**:  
+  Se agregarán nuevas frases de control que permitan ejecutar instrucciones más complejas.
+- **Flujo para Automatización**:  
+  Se desarrollará un flujo en la plataforma que permita a los usuarios definir y gestionar subrutinas de manera sencilla.
+
+### Ejemplo de Subrutinas
+
+- **Control de Motores**:  
+  Una subrutina que permita controlar motores con instrucciones como "iniciar", "detener" y "ajustar velocidad".
+- **Automatización de Sensores**:  
+  Rutinas que permitan leer datos de múltiples sensores y ejecutar acciones basadas en condiciones predefinidas.
+
+### Beneficios
+
+- Mayor flexibilidad para los usuarios al permitirles definir flujos de trabajo personalizados.
+- Reducción de la necesidad de programar directamente en el microcontrolador.
+- Expansión de las capacidades de la plataforma para proyectos más avanzados.
+
+### Desafíos
+
+- Diseñar un sistema de subrutinas que sea intuitivo y fácil de usar.
+- Garantizar que las nuevas funcionalidades no afecten el rendimiento de los microcontroladores.
