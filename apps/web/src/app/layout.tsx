@@ -5,6 +5,7 @@ import { DM_Sans } from "next/font/google";
 
 import ThemesProvider from "./ThemesProvider";
 import { Providers } from "./providers";
+import { Toaster } from "components/primitives/Toaster";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -22,7 +23,10 @@ export default function RootLayout({
     <Providers>
       <html lang="en" suppressHydrationWarning>
         <body className={dmSans.className}>
-          <ThemesProvider>{children}</ThemesProvider>
+          <ThemesProvider>
+            <Toaster />
+            {children}
+          </ThemesProvider>
         </body>
       </html>
     </Providers>

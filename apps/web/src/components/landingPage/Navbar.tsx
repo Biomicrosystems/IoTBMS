@@ -4,8 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import logo from "img/Logo.png";
 
-import { BurguerMenu } from "components/icons/BurgerMenu";
-import { XMark } from "components/icons/XMark";
 import MobileThemeSwitch from "components/common/MobileThemeSwitch";
 import ThemeSwitch from "components/common/ThemeSwitch";
 
@@ -13,6 +11,7 @@ import { useState } from "react";
 
 import type { Dispatch, SetStateAction } from "react";
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { Cross2Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +40,7 @@ export default function Navbar() {
             setIsOpen(true);
           }}
         >
-          <BurguerMenu className="size-7 stroke-lightText lg:hidden dark:stroke-darkText" />
+          <HamburgerMenuIcon className="size-6 fill-lightText stroke-[0px] lg:hidden dark:fill-darkText" />
         </span>
 
         <ThemeSwitch />
@@ -72,10 +71,10 @@ function MobileMenu(props: {
   return (
     <div className="fixed right-0 top-0 z-10 flex h-screen w-screen flex-col gap-4 bg-white px-4 py-3 dark:bg-dark">
       <span onClick={() => props.setOpen(false)} className="self-end">
-        <XMark className="size-7 stroke-lightText dark:stroke-darkText" />
+        <Cross2Icon className="size-6 fill-lightText stroke-0 dark:fill-darkText" />
       </span>
       <button
-        className="w-full rounded border border-lightText py-2 text-sm dark:border-darkText"
+        className="w-full rounded border border-lightText   py-2 text-sm dark:border-darkText"
         onClick={() => props.router.push("/logIn")}
       >
         Inicia sesión

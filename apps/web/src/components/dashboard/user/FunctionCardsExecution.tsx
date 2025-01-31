@@ -3,10 +3,12 @@ import { Doc, Id } from "convex/_generated/dataModel";
 import { useMutation } from "convex/react";
 import { useState } from "react";
 import ExecutionAlert from "../ExecutionAlert";
+import { useToast } from "components/primitives/useToast";
 
 export default function FunctionCardExecution(props: {
   functionData: Doc<"deviceFunction">;
 }) {
+  const { toast } = useToast();
   const [sendConfirmation, setSendConfirmation] = useState(false);
   const createCommand = useMutation(api.command.createCommand);
   return (
@@ -20,14 +22,28 @@ export default function FunctionCardExecution(props: {
       <span className="flex h-full items-end justify-end">
         <button
           onClick={() => {
-            if (props.functionData.userInfo) {
+            if (
+              props.functionData.userInfo ||
+              props.functionData.typeOfFunction == "FREE"
+            ) {
               setSendConfirmation(true);
             } else {
-              createCommand({
-                deviceFunctionId: props.functionData
-                  ._id as Id<"deviceFunction">,
-                deviceId: props.functionData.deviceId,
-              });
+              try {
+                createCommand({
+                  deviceFunctionId: props.functionData
+                    ._id as Id<"deviceFunction">,
+                  deviceId: props.functionData.deviceId,
+                });
+                toast({
+                  variant: "success",
+                  description: "Comando enviado con exito",
+                });
+              } catch (e: any) {
+                toast({
+                  variant: "destructive",
+                  description: e.message,
+                });
+              }
             }
           }}
           className="self-end rounded bg-accent p-2 text-sm text-white hover:bg-indigo-700"

@@ -2,6 +2,8 @@ import { storeInstace } from "../lib/store";
 import { addFilteredSerialData } from "../lib/features/filteredSerialData/filteredSerialDataSlice";
 import { createDataBlob } from "./FileProcessingUtils";
 import { addRawSerialData } from "lib/features/rawSerialData/rawSerialDataSlice";
+import { removeConectedDevice } from "lib/features/conectedDevices/conectedDevicesSlice";
+import { addUnexpectedDisconnect } from "lib/features/unexpectedDisconnect/unexpectedDisconnectSlice";
 
 /**
  * Requests access to a serial port from the user and attempts to open it using the specified baud rate.
@@ -23,11 +25,36 @@ import { addRawSerialData } from "lib/features/rawSerialData/rawSerialDataSlice"
  *   }
  * }
  */
-async function connectToSerial(baudRateSelected: number) {
-  const port = await navigator.serial.requestPort();
-  if (port) {
-    await port.open({ baudRate: baudRateSelected });
+async function connectToSerial(baudRateSelected: number, deviceId: string) {
+  try {
+    const port = await navigator.serial.requestPort();
+    if (!port) {
+      return;
+    }
+    await port.open({ baudRate: baudRateSelected, bufferSize: 16777216 });
+    port.addEventListener("disconnect", () => {
+      const devicesList = storeInstace.getState().conectedDevice;
+      const isConected = devicesList.find((item) => item.id === deviceId);
+      if (isConected) {
+        storeInstace.dispatch(addUnexpectedDisconnect(isConected));
+        storeInstace.dispatch(removeConectedDevice(deviceId));
+      }
+    });
     return port;
+  } catch (e: any) {
+    if (e.name === "NotFoundError") {
+      throw new Error("No se seleccionó ningún puerto.");
+    } else if (e.name === "SecurityError") {
+      throw new Error("Permiso denegado o bloqueado por política del sistema.");
+    } else if (e.name === "InvalidStateError") {
+      throw new Error("El puerto ya se encuentra abierto");
+    } else if (e.name === "NetworkError") {
+      throw new Error(
+        "El puerto está siendo utilizado por otra aplicación o no está conectado.",
+      );
+    } else {
+      throw new Error("No se puede establecer la conexión.");
+    }
   }
 }
 /**
@@ -121,12 +148,27 @@ async function closePort(
   reader: ReadableStreamDefaultReader | undefined,
 ) {
   if (!port || !reader) {
-    throw new Error("No hay un puerto seleccionado");
+    throw new Error("No port selected");
   }
-  reader.cancel();
+
+  try {
+    // Cancel the reader to stop data flow
+    await reader.cancel();
+  } catch (error) {
+    console.error("Error canceling reader:", error);
+  }
+
+  // Release the lock on the reader
   reader.releaseLock();
-  await port.close();
+
+  try {
+    // Close the port
+    await port.close();
+  } catch (error) {
+    console.error("Error closing port:", error);
+  }
 }
+
 /**
  * Continuously reads data from a given serial port and processes it based on predefined triggers.
  * This function listens for data transmitted over a serial connection, accumulating it until a newline
@@ -204,8 +246,10 @@ async function startReading(
           }
         }
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      alert(
+        `Error por favor desconecte el microcontrolador del dispositivo y vuelva a intentarlo`,
+      );
     }
     return "";
   }

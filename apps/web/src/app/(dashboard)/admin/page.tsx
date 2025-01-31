@@ -3,9 +3,9 @@ import Link from "next/link";
 
 import DeviceList from "components/dashboard/DeviceList";
 
-import { Plus } from "components/icons/Plus";
 import { useAppDispatch, useAppSelector } from "lib/hooks";
 import { cleanDeviceFunctionClientData } from "lib/features/deviceFunctionClientData/deviceFunctionClientDataSlice";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 export default function AdminPage() {
   const dispatch = useAppDispatch();
@@ -20,9 +20,9 @@ export default function AdminPage() {
       <DeviceList isAdmin={true} />
       <Link
         href={"/admin/newDevice"}
-        className="dark:border-darkTex flex w-full shrink-0 flex-col items-center justify-center gap-2 rounded border border-lightText p-4 hover:bg-neutral-50 lg:h-40  2xl:h-44 2xl:w-full"
+        className="flex w-full shrink-0 flex-col items-center justify-center gap-2 rounded border border-lightText p-4 transition fade-in-100 hover:bg-neutral-50 lg:h-40 2xl:h-44 2xl:w-full dark:border-darkText dark:hover:bg-white/10 "
       >
-        <Plus className="size-10 stroke-lightText 2xl:size-16 dark:stroke-darkText" />
+        <PlusIcon className="size-10 text-lightText 2xl:size-16 dark:text-darkText" />
         <p className="text-sm text-lightText  2xl:text-base dark:text-darkText">
           Añadir dispositivo
         </p>

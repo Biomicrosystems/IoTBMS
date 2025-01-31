@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import FunctionCard from "components/dashboard/admin/device/FunctionCard";
 
@@ -27,19 +27,48 @@ import { useMutation, useQuery } from "convex/react";
 
 import type { conectedDeviceData } from "types/serial";
 import EditView from "components/dashboard/admin/device/EditView";
-import { cleanDeviceFunctionClientData } from "lib/features/deviceFunctionClientData/deviceFunctionClientDataSlice";
 import {
+  ejex,
   filterAndFormatData,
+  generarListaNumeros,
   getCardsData,
   getGraphData,
 } from "utils/FileProcessingUtils";
-import { Card, LineChart } from "@tremor/react";
+import GraphComponent from "components/primitives/Chart";
+import DeviceGraph from "components/dashboard/device/DeviceGraph";
+import { useToast } from "components/primitives/useToast";
+import { CheckIcon, GearIcon } from "@radix-ui/react-icons";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "components/primitives/Popover";
+
+import {
+  Command,
+  CommandInput,
+  CommandEmpty,
+  CommandItem,
+  CommandList,
+} from "components/primitives/Command";
 
 export default function Device() {
+  const { toast } = useToast();
+  const baudRateData = [
+    300, 600, 750, 1200, 2400, 4800, 9600, 19200, 31250, 38400, 57600, 74880,
+    115200, 230400, 250000, 460800, 500000, 921600, 1000000, 2000000,
+  ];
+  //Set state Functions
+  const dispatch = useAppDispatch();
+  const setDeviceInactive = useMutation(api.device.setDeviceInactive);
+
   const params = useParams<{ deviceName: string }>();
   const deviceId = deFormatUrl(params.deviceName);
 
+  //Get state Functions
   const [isEditing, setIsEditing] = useState(false);
+  const [baudRate, setBaudRate] = useState(9600);
+  const [popoverOpen, setPopoverOpen] = useState(false);
   const [selectedPort, setSelectedPort] = useState<SerialPort | undefined>(
     undefined,
   );
@@ -47,11 +76,6 @@ export default function Device() {
     undefined,
   );
 
-  const dispatch = useAppDispatch();
-
-  const currentDeviceFunctions = useAppSelector(
-    (state) => state.deviceFunctionClientData,
-  );
   const rawSerialData = useAppSelector((state) => state.rawSerialData);
   const devicesList = useAppSelector((state) => state.conectedDevice);
 
@@ -62,62 +86,44 @@ export default function Device() {
     deviceId: deviceId as Id<"device">,
   });
 
-  const setDeviceInactive = useMutation(api.device.setDeviceInactive);
-
-  const isConected = devicesList.find((item) => item.id === deviceId);
-
-  if (selectedPort === undefined) {
-    if (isConected) {
-      setSelectedPort(isConected.device);
-      setReader(isConected.reader);
-    }
-  }
-
-  useEffect(() => {
-    if (selectedPort !== undefined) {
-      const data: conectedDeviceData = {
-        id: deviceId,
-        device: selectedPort,
-        reader: reader as ReadableStreamDefaultReader,
-      };
-      dispatch(addConectedDevice(data));
-    } else {
-      dispatch(cleanRawSerialData(deviceId));
-    }
-  }, [selectedPort]);
-
-  useEffect(() => {
-    if (currentDeviceFunctions.length > 0) {
-      dispatch(cleanDeviceFunctionClientData());
-    }
-  }, [currentDeviceFunctions]);
+  // Variable Data - recalculated each re render
 
   const textSerialData = rawSerialData.map((data) => data.data);
   const formattedData = filterAndFormatData(textSerialData.join(""));
 
   const graphData = getGraphData(formattedData);
-  const cardData = getCardsData(formattedData);
+  //const cardData = getCardsData(formattedData);
 
+  // Effects
+
+  useEffect(() => {
+    const isConected = devicesList.find((item) => item.id === deviceId);
+    if (selectedPort === undefined) {
+      if (isConected) {
+        setSelectedPort(isConected.device);
+        setReader(isConected.reader);
+      }
+    } else {
+      if (!isConected) {
+        setSelectedPort(undefined);
+        setReader(undefined);
+      }
+    }
+  }, [devicesList]);
+
+  useEffect(() => {
+    if (selectedPort !== undefined) {
+      return;
+    } else {
+      dispatch(cleanRawSerialData(deviceId));
+    }
+  }, [selectedPort]);
+
+  // Component Render
   const serialDataCard = formattedData.map((data, index) => {
     return <ul key={index}>{data}</ul>;
   });
-  const cardDataComponent = cardData?.map((value, index) => {
-    return (
-      <Card
-        className="max-w-xs shrink-0"
-        decoration="top"
-        decorationColor="indigo"
-        key={index}
-      >
-        <p className="text-center text-xs lg:text-sm dark:text-dark-tremor-content">
-          {value.title}
-        </p>
-        <p className="text-center text-2xl font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-          {value.data}
-        </p>
-      </Card>
-    );
-  });
+  // const cardDataComponent = cardData?.map((value, index) => {});
   const functionscom = functions?.map((e, i) => {
     return <FunctionCard functionData={e} key={i} serialPort={selectedPort} />;
   });
@@ -158,6 +164,7 @@ export default function Device() {
           <div className="dark:border-darkTex relative mb-4 max-h-32 min-h-20 w-full overflow-y-scroll rounded border border-lightText p-2 text-sm">
             <ul>{serialDataCard}</ul>
           </div>
+          {/*
           <h4 className="mb-2 text-sm lg:text-xl">Últimos datos recibidos</h4>
           <p className="mb-4 text-xs italic text-lightText lg:text-sm dark:text-darkText">
             Para ver datos en esta seccion envialos con el formato
@@ -169,26 +176,17 @@ export default function Device() {
             ) : (
               <p>No hay datos configurados para mostrar su ultimo valor</p>
             )}
-          </div>
+          </div>*/}
           <h4 className="mb-2 text-sm lg:text-xl">Graficas</h4>
-          <p className="mb-4 text-xs italic text-lightText lg:text-sm dark:text-darkText">
+          <p className=" text-xs italic text-lightText lg:text-sm dark:text-darkText ">
             Para ver datos en esta seccion envialos con el formato
             "&gt;variable:"
           </p>
-          {graphData.jsonResult.length > 0 ? (
-            <LineChart
-              data={graphData.jsonResult}
-              index="index"
-              categories={graphData.variableNames}
-              onValueChange={(v) => console.log(v)}
-            />
-          ) : (
-            <p>No hay datos configurados para graficar</p>
-          )}
-          <div className="fixed bottom-0 left-0 flex h-16 w-full items-center justify-center gap-8 border-t border-t-lightText/60 bg-white drop-shadow lg:absolute lg:justify-end lg:px-12 dark:border-t-darkText dark:bg-dark">
-            {selectedPort ? (
-              <></>
-            ) : (
+
+          <DeviceGraph graphData={graphData} />
+
+          <div className="fixed bottom-0 left-0 flex h-[4.4rem] w-full items-center justify-center gap-8 border-t border-t-lightText/60 bg-white drop-shadow lg:absolute lg:justify-end lg:px-12 dark:border-t-darkText dark:bg-dark">
+            {!selectedPort && (
               <button
                 className="rounded border border-lightText bg-transparent px-8 py-2 text-sm text-lightText transition hover:bg-gray-50 dark:border-darkText dark:text-darkText"
                 onClick={() => setIsEditing(true)}
@@ -196,32 +194,101 @@ export default function Device() {
                 Editar
               </button>
             )}
-            {"serial" in navigator ? (
-              <>
+            {"serial" in navigator && (
+              <div className="flex items-center justify-center">
+                <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <button
+                      className={`flex h-full items-center  justify-center rounded-l border-r border-r-indigo-400 bg-accent px-1 py-2 transition hover:bg-indigo-700 ${selectedPort ? "hidden" : ""}`}
+                    >
+                      <GearIcon className="size-5 text-white" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="h-80 w-48 bg-white  text-sm dark:bg-dark">
+                    <Command
+                      defaultValue={baudRate.toString()}
+                      className="h-full"
+                    >
+                      <CommandInput placeholder="Tasa de baudios" />
+                      <CommandEmpty>No se encontro</CommandEmpty>
+                      <CommandList className="h-full">
+                        {baudRateData.map((data, index) => {
+                          return (
+                            <CommandItem
+                              value={data.toString()}
+                              key={data}
+                              onSelect={(value) => {
+                                setPopoverOpen(false);
+                                setBaudRate(Number(value));
+                              }}
+                              className="flex justify-between"
+                            >
+                              {data}
+                              <CheckIcon
+                                className={`${baudRate === data ? "opacity-100" : "opacity-0"}`}
+                              />
+                            </CommandItem>
+                          );
+                        })}
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
                 <button
-                  className={`rounded  px-8 py-2 text-sm text-white ${!selectedPort ? "bg-accent hover:bg-indigo-700" : "bg-danger hover:bg-red-600"} transition`}
+                  className={`rounded-r  px-8 py-2 text-sm text-white  transition ${!selectedPort ? "bg-accent hover:bg-indigo-700" : "bg-danger hover:bg-red-600"}`}
                   onClick={async () => {
                     if (!selectedPort) {
-                      const serialPort = await connectToSerial(9600);
-                      const reader = await getReader(serialPort);
+                      try {
+                        const serialPort = await connectToSerial(
+                          baudRate,
+                          deviceId,
+                        );
+                        const reader = await getReader(serialPort);
 
-                      setSelectedPort(serialPort);
-                      setReader(reader);
-                      startReading(serialPort, reader, deviceId);
+                        setSelectedPort(serialPort);
+                        setReader(reader);
+                        if (!serialPort || !reader) {
+                          toast({
+                            title: "¡Algo Salio Mal!",
+                            description: "Vuelve a intentarlo",
+                            variant: "destructive",
+                          });
+                          return;
+                        }
+                        const data: conectedDeviceData = {
+                          id: deviceId,
+                          device: serialPort,
+                          reader: reader,
+                        };
+                        dispatch(addConectedDevice(data));
+                        startReading(serialPort, reader, deviceId);
+                        toast({
+                          description: "Dispositivo Conectado correctamente",
+                          variant: "success",
+                        });
+                      } catch (e: any) {
+                        toast({
+                          title: "¡Algo Salio Mal!",
+                          description: e.message,
+                          variant: "destructive",
+                        });
+                      }
                     } else {
-                      await closePort(selectedPort, reader);
                       dispatch(removeConectedDevice(deviceId));
+                      await closePort(selectedPort, reader);
                       setReader(undefined);
                       setSelectedPort(undefined);
                       setDeviceInactive({ deviceId: deviceId as Id<"device"> });
+                      toast({
+                        variant: "success",
+                        description: "Dispositivo desconectado con éxito.",
+                      });
                     }
                   }}
                 >
                   {selectedPort ? "Desconectar" : "Conectar"}
                 </button>
-              </>
-            ) : (
-              <></>
+              </div>
             )}
           </div>
         </>

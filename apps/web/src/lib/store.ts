@@ -5,6 +5,7 @@ import databaseDataReducer from "./features/databaseData/dataBaseDataSlice";
 import deviceFunctionClientDataSlice from "./features/deviceFunctionClientData/deviceFunctionClientDataSlice";
 import fileEnqueuReducer from "./features/fileQueue/fileQueueSlice";
 import rawSerialDataReducer from "./features/rawSerialData/rawSerialDataSlice";
+import unexpectedDisconnectReducer from "./features/unexpectedDisconnect/unexpectedDisconnectSlice";
 const makeStore = () => {
   return configureStore({
     reducer: {
@@ -14,6 +15,7 @@ const makeStore = () => {
       deviceFunctionClientData: deviceFunctionClientDataSlice,
       fileEnqueu: fileEnqueuReducer,
       rawSerialData: rawSerialDataReducer,
+      unexpectedDisconnect: unexpectedDisconnectReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ serializableCheck: false }),

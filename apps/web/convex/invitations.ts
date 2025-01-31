@@ -49,6 +49,9 @@ export const createInvitation = mutation({
     );
 
     await ctx.db.patch(newInvitation, { deleteSchedulerId: scheduler });
+    return {
+      result: "success",
+    };
   },
 });
 
@@ -140,6 +143,41 @@ export const getUserInvitationInfoByTeamId = query({
     });
 
     return userInfoName;
+  },
+});
+
+export const deleteInvitationByUserName = mutation({
+  args: {
+    userName: v.string(),
+    teamId: v.id("team"),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("user")
+      .filter((q) => q.eq(q.field("userName"), args.userName))
+      .unique();
+    if (!user) {
+      return;
+    }
+    const invitation = await ctx.db
+      .query("invitations")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("userId"), user.userId),
+          q.eq(q.field("teamId"), args.teamId),
+        ),
+      )
+      .unique();
+    if (!invitation) {
+      return;
+    }
+    const schedulerId = invitation.deleteSchedulerId;
+    await ctx.db.delete(invitation._id);
+    if (!schedulerId) {
+      return true;
+    }
+    await ctx.scheduler.cancel(schedulerId);
+    return true;
   },
 });
 

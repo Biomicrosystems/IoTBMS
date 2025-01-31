@@ -1,0 +1,103 @@
+---
+sidebar_position: 2
+---
+
+import libre from "./libre.png";
+
+# Funciones básicas
+
+## Creación o Edición de una Función
+
+Para poner crear o editar una función deberas ser parte de un equipo donde tu seas el administrador. En la barra superior podrás observar tu rol actual.
+
+1. **Accede al dispositivo**:  
+   En la aplicación, conectate al dispositivo en modo administrador. Aquí podrás ver una lista de las funciones existentes.
+
+2. **Edita las funciones**:
+   En la barra inferior selecciona la opcion de editar.
+
+### Función basica
+
+Una función basica esta compuesta por
+
+- **Nombre**: El identificador principal de la función. Este será visible para los usuarios.
+- **Descripción**: Una breve explicación de lo que hace la función.
+- **Tipo de Función**: Selecciona si la función será de tipo **comando** o **libre** (ver detalles abajo)
+- **Mensaje**: Instrucciones que aparecerán al usuario al ejecutar la función.
+
+### Tipos de Función
+
+1.  **Tipo Comando**: En este tipo de función, el administrador define un comando preestablecido que se enviará al microcontrolador al ejecutarla. Es útil para dispositivos con estados específicos o acciones puntuales. Esta función se ejecutara inmediatamente si la opcion de `¿Deseas recibir información del usuario para ejecutar la función?` esta desactivada.
+
+- **Ejemplo**: Una función para encender un LED podría tener el comando `LED_ON`.
+- **Valor enviado al microcontrolador**: `LED_ON`
+
+2.  **Tipo Libre**:En este tipo de función, el usuario puede escribir cualquier dato al momento de ejecutar la función. Es ideal para casos en los que se necesita flexibilidad en la entrada. Al momento de ejecutarse le preguntará al usuario por el dato que desea enviar.
+
+- **Ejemplo**: Una función para enviar un mensaje personalizado al microcontrolador podría permitir al usuario escribir cualquier texto.
+- **Valor enviado al microcontrolador**: Se envia exactamente lo que el usuario escriba.
+
+<img alt="Ejemplo funcion libre" src={libre} style={{ margin: "0 auto " }} />
+## Configuración del Código en Arduino
+
+Para que el microcontrolador sea compatible con la aplicación, debes programarlo para interpretar los comandos enviados a través del puerto serial. A continuación, se muestra un ejemplo básico de cómo configurar el código en Arduino:
+
+```cpp
+void setup() {
+  Serial.begin(9600);
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+  if (Serial.available() > 0) { // Verifica si hay datos disponibles en el puerto serial
+    char command = Serial.read(); // Lee el comando enviado
+
+    // Procesa el comando recibido
+    if (command == "A") {
+      digitalWrite(LED_BUILTIN, HIGH); // Enciende el LED
+    } else if (command == "B") {
+      digitalWrite(LED_BUILTIN, LOW); // Apaga el LED
+    } else {
+      Serial.println("Comando no reconocido"); // Maneja comandos desconocidos
+    }
+  }
+}
+
+```
+
+Para funciones con comando asegurate de que el comando sea igual en la aplicación tanto en el codigo. En este ejemplo los comandos posibles serian `A` y `B`
+
+Las funciones libres permiten la creacion de comandos mas complejos que solo caracteres o numeros. como por ejemplo un comando `C|D|E` que sea necesario en ese formato para alguna ejecución en el codigo
+
+**Para integrar correctamente solo es necesaria esta lectura por puerto serial. No es necesaria niguna libreria externa o arquitectura especifica. Por lo que podras escribir el codigo normalmente.**
+
+---
+
+## Prueba tus funciones
+
+Una vez que hayas creado y configurado tus funciones, es importante probarlas para asegurarte de que funcionan correctamente. La aplicación ofrece dos modos principales para interactuar con los dispositivos: **Modo Administrador** y **Modo Usuario**. Cada uno tiene un propósito específico y una forma distinta de enviar comandos al microcontrolador.
+
+---
+
+### Modos de la Aplicación
+
+#### 1. **Modo Administrador**
+
+El **Modo Administrador** está diseñado para configurar y probar las funciones directamente, simulando un entorno de desarrollo. Este modo permite conectar un dispositivo al puerto serial y enviar comandos como si estuvieras utilizando un monitor serial, similar al que se encuentra en el IDE de Arduino.
+
+- **Características del Modo Administrador**:
+  1. Accede a la aplicación en **Modo Administrador**.
+  2. Conecta el microcontrolador a la computadora mediante un cable USB o Bluetooth.
+  3. Selecciona el dispositivo conectado desde la lista de puertos seriales disponibles.
+  4. Envía comandos desde la interfaz de la aplicación y verifica que el microcontrolador responda correctamente.
+  5. Observa las respuestas del microcontrolador en la consola serial integrada.
+
+#### 2. **Modo Usuario**
+
+El **Modo Usuario** está diseñado para el uso final de las funciones, permitiendo a los usuarios enviar comandos al microcontrolador desde cualquier lugar del mundo a través de Internet. En este modo, los comandos configurados en la aplicación se redirigen al microcontrolador mediante la computadora conectada al dispositivo.
+
+- **Características del Modo Usuario**:
+
+  - Los comandos se envían a través de Internet, no directamente por el puerto serial.
+  - Los usuarios no necesitan acceso físico al dispositivo ni a la computadora conectada.
+  - Es ideal para laboratorios remotos o aplicaciones en las que los usuarios interactúan con dispositivos desde redes externas.

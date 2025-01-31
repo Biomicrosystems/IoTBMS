@@ -12,6 +12,8 @@ import { api } from "convex/_generated/api";
 import { Id } from "convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { posibleStatus } from "types/serial";
+import { useToast } from "components/primitives/useToast";
+import { removeUnexpectedDisconnect } from "lib/features/unexpectedDisconnect/unexpectedDisconnectSlice";
 
 export default function AdminLayout({
   children,
@@ -19,11 +21,15 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   const dispatch = useAppDispatch();
-
+  const { toast } = useToast();
   const dataToSend = useAppSelector((state) => state.fileEnqueu);
   const deviceConected = useAppSelector((state) => state.conectedDevice);
   const conectedDeviceIds = deviceConected.map(
     (data) => data.id as Id<"device">,
+  );
+
+  const unexpectedDisconections = useAppSelector(
+    (state) => state.unexpectedDisconnect,
   );
   const currentTeam = useAppSelector(
     (state) => state.databaseData.userActiveTeam,
@@ -43,6 +49,24 @@ export default function AdminLayout({
   const writeFileToDb = useMutation(api.device.sendFileIdentifier);
   const updateCommandStatus = useMutation(api.command.updateCommandStatus);
   const setDeviceActive = useMutation(api.device.setDeviceActive);
+
+  useEffect(() => {
+    if (unexpectedDisconections.length > 0) {
+      unexpectedDisconections.forEach((device) => {
+        const deviceFound = devices?.find(
+          (data) => device.id === (data._id as string),
+        );
+        if (deviceFound) {
+          toast({
+            variant: "destructive",
+            title: "Dispositivo Desconectado",
+            description: `Se ha perdido la comunicación con el dispositivo "${deviceFound.name}."`,
+          });
+          dispatch(removeUnexpectedDisconnect(device.id));
+        }
+      });
+    }
+  }, [unexpectedDisconections]);
 
   useEffect(() => {
     if (!devices) {

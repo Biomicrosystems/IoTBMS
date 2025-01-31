@@ -1,4 +1,3 @@
-import { invitations } from "@clerk/clerk-sdk-node";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -32,6 +31,7 @@ export default defineSchema({
     name: v.string(),
     description: v.string(),
     command: v.string(),
+    typeOfFunction: v.string(),
     blocking: v.boolean(),
     userInfo: v.boolean(),
     userTypeOfEntry: v.optional(v.string()),
@@ -40,7 +40,7 @@ export default defineSchema({
     format: v.optional(v.string()),
     maxInterval: v.optional(v.number()),
     minInterval: v.optional(v.number()),
-    scaleData: v.optional(v.array(v.number())),
+    scaleData: v.optional(v.array(v.union(v.number(), v.string()))),
     sendData: v.boolean(),
     message: v.optional(v.string()),
     streaming: v.boolean(),

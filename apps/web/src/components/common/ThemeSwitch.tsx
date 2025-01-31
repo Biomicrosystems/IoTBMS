@@ -1,19 +1,17 @@
 "use client";
-import { Desktop } from "components/icons/Desktop";
-import { Moon } from "components/icons/Moon";
-import { Sun } from "components/icons/Sun";
 
 import { useTheme } from "next-themes";
 
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
-} from "@headlessui/react";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "components/primitives/DropdownMenu";
+
+import { DesktopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 export default function ThemeSwitch() {
   const [mounted, setMounted] = useState(false);
@@ -27,53 +25,42 @@ export default function ThemeSwitch() {
   }
 
   return (
-    <Menu as="div" className="relative hidden lg:block">
-      <MenuButton className="flex items-center justify-center">
+    <DropdownMenu>
+      <DropdownMenuTrigger className="hidden lg:block">
         {resolvedTheme === "light" ? (
-          <Sun className="size-6 stroke-lightText" />
+          <SunIcon className="size-6 text-lightText dark:text-darkText" />
         ) : (
-          <Moon className="size-6 stroke-darkText" />
+          <MoonIcon className="size-6 text-lightText dark:text-darkText " />
         )}
-      </MenuButton>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="end"
+        className="animate-openMenu bg-white dark:bg-dark"
       >
-        <MenuItems className="absolute right-1 mt-2 flex w-44 origin-top-right flex-col rounded bg-white  shadow-lg ring-1 ring-lightText/20 focus:outline-none dark:bg-dark dark:ring-darkText ">
-          <MenuItem>
-            <button
-              onClick={() => setTheme("light")}
-              className="flex h-full items-center gap-2 px-2 py-1 text-sm text-lightText data-[focus]:bg-black/10 dark:text-darkText dark:data-[focus]:bg-white/10 "
-            >
-              <Sun className="size-6 stroke-lightText dark:stroke-darkText" />
-              Modo claro
-            </button>
-          </MenuItem>
-          <MenuItem>
-            <button
-              onClick={() => setTheme("dark")}
-              className="flex items-center gap-2 px-2 py-1 text-sm text-lightText data-[focus]:bg-black/10 dark:text-darkText dark:data-[focus]:bg-white/10"
-            >
-              <Moon className="size-6 stroke-lightText  dark:stroke-darkText" />
-              Modo Oscuro
-            </button>
-          </MenuItem>
-          <MenuItem>
-            <button
-              onClick={() => setTheme("system")}
-              className="flex items-center gap-2 px-2 py-1 text-sm text-lightText data-[focus]:bg-black/10 dark:text-darkText dark:data-[focus]:bg-white/10"
-            >
-              <Desktop className="size-6 stroke-lightText dark:stroke-darkText" />
-              Sistema
-            </button>
-          </MenuItem>
-        </MenuItems>
-      </Transition>
-    </Menu>
+        <DropdownMenuItem
+          className="flex  items-center gap-2 px-2 py-1 text-sm text-lightText focus:bg-black/10 dark:text-darkText dark:focus:bg-white/10"
+          onSelect={() => setTheme("light")}
+        >
+          <SunIcon className="size-5 text-lightText dark:text-darkText " />
+          Modo claro
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className="flex  items-center gap-2 px-2 py-1 text-sm text-lightText focus:bg-black/10 dark:text-darkText dark:focus:bg-white/10"
+          onSelect={() => setTheme("dark")}
+        >
+          <MoonIcon className="size-5 text-lightText dark:text-darkText" />
+          Modo Oscuro
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className="flex  items-center gap-2 px-2 py-1 text-sm text-lightText focus:bg-black/10 dark:text-darkText dark:focus:bg-white/10"
+          onSelect={() => setTheme("system")}
+        >
+          <DesktopIcon className="size-5 text-lightText dark:text-darkText " />
+          Sistema
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

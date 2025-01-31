@@ -1,9 +1,11 @@
-import { Clock } from "components/icons/Clock";
-import { ExclamationTriangle } from "components/icons/ExclamationTriangle";
+import { ClockIcon } from "@radix-ui/react-icons";
+import TeamMemberEliminationAlert from "./TeamMemberEliminationAlert";
+import { Id } from "convex/_generated/dataModel";
 
 export default function TeamMemberCard(props: {
   userName: string | undefined;
   isPending: boolean;
+  teamId: Id<"team">;
   isAdmin: boolean;
 }) {
   if (!props.userName) {
@@ -11,7 +13,7 @@ export default function TeamMemberCard(props: {
   }
   return (
     <div
-      className={`flex w-full items-center justify-between rounded-md border border-lightText px-4 py-2 dark:border-darkText ${props.isPending ? "border-neutral-100 bg-neutral-100 dark:border-neutral-800/90 dark:bg-neutral-800/90" : ""}`}
+      className={`flex w-full items-center justify-between rounded-md border border-lightText px-4 py-2 dark:border-darkText ${props.isPending ? "border-neutral-100 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800/90" : ""}`}
     >
       <div className="flex items-center justify-center gap-4">
         <span className="flex size-10 items-center justify-center rounded-full border border-accent text-accent">
@@ -21,19 +23,15 @@ export default function TeamMemberCard(props: {
       </div>
       <div className="flex items-center justify-center gap-4">
         <>
-          {props.isPending ? (
-            <Clock className="size-5 stroke-yellow-500" />
-          ) : (
-            <></>
-          )}
+          {props.isPending && <ClockIcon className="size-5 text-yellow-500" />}
         </>
         <>
-          {props.isAdmin ? (
-            <span>
-              <ExclamationTriangle className="size-5 stroke-danger" />
-            </span>
-          ) : (
-            <></>
+          {props.isAdmin && (
+            <TeamMemberEliminationAlert
+              name={props.userName}
+              teamId={props.teamId}
+              isPending={props.isPending}
+            />
           )}
         </>
       </div>
