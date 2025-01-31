@@ -2,4 +2,167 @@
 sidebar_position: 3
 ---
 
-# Funciones con datos del usuario
+import scale from "./scaleCom.mp4";
+import interval from "./intervalFun.mp4";
+
+# Funciones con Recepción de Datos del Usuario
+
+En esta sección aprenderás cómo configurar funciones que reciben datos del usuario, cómo la aplicación interactúa dependiendo del tipo de entrada seleccionado (**intervalo** o **escala**), y cómo estos datos se envían al microcontrolador.
+
+---
+
+## ¿Qué son las Funciones con Recepción de Datos?
+
+Las funciones con recepción de datos permiten que el usuario proporcione información adicional al momento de ejecutar la función. Esta información puede ser un valor numérico o texto, dependiendo de cómo configures la función. Este tipo de funciones es útil para casos en los que el microcontrolador necesita parámetros específicos para realizar una acción.
+
+---
+
+## Configuración de Funciones con Recepción de Datos
+
+### Pasos para Crear una Función con Recepción de Datos
+
+1. **Accede al Panel de Funciones desde el dispositivo**:  
+   En la aplicación, dirígete a la sección de funciones y selecciona "Crear nueva función" o edita una existente.
+
+2. **Habilita la Recepción de Datos**:  
+   Con el tipo de función configurada como comando, Activa la opción **"Recibe datos del usuario"** en la configuración de la función.
+
+3. **Selecciona el Tipo de Entrada**:  
+   Define cómo el usuario proporcionará los datos:
+
+   - **Numérica**: Permite al usuario ingresar valores numéricos.
+   - **Texto**: Permite al usuario ingresar un valor alfanumérico.
+
+4. **Configura el Formato de Entrada**:  
+   Dependiendo del tipo de entrada, selecciona uno de los siguientes formatos:
+
+   - **Escala**: El administrador define una lista de valores específicos que el usuario puede seleccionar.
+   - **Intervalo**: El administrador define un rango (mínimo y máximo) dentro del cual el usuario puede ingresar un valor. _(Solo disponible para entradas numéricas)._
+
+5. **Define la Unidad (Opcional)**:  
+   Si es necesario, especifica la unidad de los datos que el usuario debe ingresar (por ejemplo, segundos, milisegundos, grados Celsius, etc.).
+
+6. **Guarda la Función**:  
+   Una vez configurada, guarda la función para que esté disponible en la aplicación.
+
+---
+
+## Interacción de la Aplicación con el Usuario
+
+### 1. **Formato de Escala**
+
+Cuando seleccionas el formato **Escala**, el usuario verá una lista de opciones predefinidas al ejecutar la función. Esto asegura que solo se puedan enviar valores específicos al microcontrolador.
+
+- **Ejemplo de Configuración**:
+
+  - Tipo de Entrada: Numérica
+  - Formato: Escala
+  - Valores de Escala: `10`, `20`, `30`
+  - Unidad: Milisegundos
+
+- **Interacción del Usuario**:  
+  El usuario seleccionará uno de los valores disponibles (por ejemplo, `10`, `20` o `30` milisegundos) desde un menú desplegable.
+
+- **Datos Enviados al Microcontrolador**:  
+   El valor seleccionado se enviará directamente al microcontrolador como parte del comando. Por ejemplo, si el comando base es `A`, el microcontrolador recibirá: `A20`
+
+<div
+  style={{
+    border: "1px #e2e8f0 solid",
+    display: "flex",
+    justifyContent: "center",
+  }}
+>
+  <video
+    src={scale}
+    loop
+    style={{
+      border: "black 1px",
+      width: "90%",
+      height: "auto",
+      aspectRatio: "450/253",
+    }}
+    controls
+  ></video>
+</div>
+
+### 2. **Formato de Intervalo**
+
+Cuando seleccionas el formato **Intervalo**, el usuario puede ingresar cualquier valor dentro del rango definido por el administrador. Esto proporciona mayor flexibilidad, pero requiere validación para asegurarse de que el valor esté dentro del rango permitido.
+
+- **Ejemplo de Configuración**:
+- Tipo de Entrada: Numérica
+- Formato: Intervalo
+- Intervalo Mínimo: `5`
+- Intervalo Máximo: `50`
+- Unidad: Segundos
+
+- **Interacción del Usuario**:  
+  El usuario ingresará un valor dentro del rango permitido (por ejemplo, `25` segundos). Si el usuario ingresa un valor fuera del rango automaticamente se pondra el valor permitido más cercano. (por ejemplo, `60` sera `50`)
+
+- **Datos Enviados al Microcontrolador**:  
+  El valor ingresado se enviará como parte del comando. Por ejemplo, si el comando base es `A`, el microcontrolador recibirá: `A25`
+
+<div
+  style={{
+    border: "1px #e2e8f0 solid",
+    display: "flex",
+    justifyContent: "center",
+  }}
+>
+  <video
+    src={interval}
+    loop
+    style={{
+      border: "black 1px",
+      width: "90%",
+      height: "auto",
+      aspectRatio: "450/253",
+    }}
+    controls
+  ></video>
+</div>
+
+---
+
+## Cómo impacta el formato en el la programación del Microcontrolador
+
+En la sección anterior vimos un ejemplo de codigo compatible, este mismo codigo es funcional para este tipo de funciones,
+dado que esta solo estan diseñadas para mejorar la experiencia de usuario al ejecutar comandos en tus dispostiivos.
+
+Vamos a dar un ejemplo de uso para este tipo de funciones:
+
+```cpp
+int delayT;
+
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(2, OUTPUT);
+}
+
+void loop()
+{
+  if (Serial.available() > 0)
+  {
+    char value = Serial.read();
+    switch (value)
+    {
+    case 'A':
+      delayT = Serial.parseInt(); // Se lee el valor que llega desde puerto serial
+      digitalWrite(2, HIGH);
+      delay(delayT); // Se utiliza este valor como valor del delay
+      digitalWrite(2, LOW);
+      delay(delayT);
+      break;
+
+    default:
+      break;
+    }
+  }
+}
+
+
+```
+
+En este caso puedes dar un intervalo de valores o una escala dependiendo de la funcionalidad de tu dispostivo.

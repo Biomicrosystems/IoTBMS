@@ -1,3 +1,84 @@
 ---
 sidebar_position: 1
 ---
+
+# Estructura del Proyecto
+
+Este proyecto está organizado como un **monorepo** utilizando **Turborepo**. Esto permite gestionar múltiples proyectos relacionados dentro de un único repositorio, optimizando la colaboración y el rendimiento en el desarrollo.
+
+### Proyectos en el Monorepo
+
+El monorepo contiene dos proyectos principales:
+
+1. **Documentación**:
+
+   - **Framework**: [Docusaurus](https://docusaurus.io/)
+   - **Propósito**: Este proyecto contiene la documentación del sistema, incluyendo guías de uso, configuración y mantenimiento.
+   - **Ubicación**: Carpeta `docs/`.
+
+2. **Aplicación Web**:
+   - **Framework**: [Next.js](https://nextjs.org/)
+   - **Backend**: [Convex](https://www.convex.dev/)
+   - **Autenticación**: [Clerk](https://clerk.dev/)
+   - **Propósito**: Este proyecto es la aplicación principal que interactúa con los dispositivos y los usuarios.
+   - **Ubicación**: Carpeta `web/`.
+
+---
+
+## Estructura de Carpetas
+
+El repositorio está organizado de la siguiente manera (se muestran las principales carpetas):
+
+```
+|─apps
+   |─docs
+   |   |─docs //Contenidos de la documentación
+   |─web
+       |─convex // Funciones de comunicación con base de datos
+       |─src
+         |─app // directorio de rutas principal
+         |─assets // imagenes o archivos estaticos
+         |─components // Components de interfaz del usuario (front -end)
+         |─lib // Funciones del estado global de la aplicación (redux store)
+         |─services // funciones a base de datos usados por el middleware de la aplicación
+         |─types // tipos de datos definidos
+         |─utils // funciones de procesamiento de datos, comunicación serial y otros
+```
+
+## Scripts Comunes
+
+En el archivo `package.json` del monorepo, se definen scripts comunes para facilitar el desarrollo y mantenimiento. Algunos ejemplos:
+
+- **Instalar Dependencias**:
+  ```bash
+  npm install
+  ```
+- **Ejecutar entorno local**:
+
+  ```bash
+  npm run dev
+  ```
+
+Para una correcta ejecución del proyecto se debe inicializar el .env con las siguientes variables:
+
+```
+ CONVEX_DEPLOYMENT // obtenido de convex
+ NEXT_PUBLIC_CONVEX_URL // obtenido de convex
+ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY //obtenido de clerk
+ CLERK_SECRET_KEY= //obtenido de clerk
+ CLERK_JWT_ISSUER_DOMAIN = //obtenido de clerk
+```
+
+##Preparacion de entorno local
+
+Para preparar el entorno local es necesario tener una cuenta en convex con un proyecto inicializado. (Ver documentación de convex)
+luego ejecutar el comando
+
+```bash
+npx convex dev
+```
+
+Luego con una cuenta de clerk inicializar un nuevo proyecto de desarrollo.
+Haz una nueva platilla de JWT para integrar con convex. ([Seguir documentación](https://docs.convex.dev/auth/clerk))
+
+Una vez configurado esto se podra ejecutar el entorno de desarrollo local.

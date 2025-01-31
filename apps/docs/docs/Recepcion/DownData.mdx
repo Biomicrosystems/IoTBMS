@@ -1,0 +1,91 @@
+---
+sidebar_position: 3
+---
+
+import data from "./downData.mp4";
+
+# Descarga de datos recibidos
+
+En esta sección aprenderás cómo descargar los datos enviados por el microcontrolador en **Modo Usuario**. La aplicación permite exportar los datos en formato **CSV**, con opciones para personalizar el separador de columnas y el formato de los puntos decimales.
+
+---
+
+## Disponibilidad de la Descarga de Datos
+
+La descarga de datos solo está disponible en el **Modo Usuario**. Esto se debe a que, en este modo, los datos enviados por el microcontrolador se capturan entre las palabras de control **`start`** y **`finish`**, se procesan, y se guardan automáticamente en un archivo **CSV**. Una vez que la ejecución de la función ha finalizado, el archivo estará disponible para su descarga.
+
+---
+
+## Opciones de Descarga
+
+Al descargar los datos, puedes personalizar el formato del archivo **CSV** según tus necesidades. Las opciones disponibles son:
+
+### 1. **Separador de Columnas**
+
+Puedes elegir el carácter que separará las columnas en el archivo **CSV**. Las opciones disponibles son:
+
+- **Coma (`,`)**: Este es el separador estándar para archivos CSV.
+- **Punto y coma (`;`)**: Útil para configuraciones regionales donde el punto y coma es el separador predeterminado.
+
+### 2. **Formato de Puntos Decimales**
+
+Puedes seleccionar el formato de los puntos decimales en los datos numéricos. Las opciones disponibles son:
+
+- **Punto (`.`)**: Este es el formato estándar para decimales en la mayoría de los países.
+- **Coma (`,`)**: Útil para configuraciones regionales donde la coma se utiliza como separador decimal.
+
+---
+
+## Cómo Descargar los Datos
+
+### Pasos para Descargar los Datos
+
+1. **Ejecuta la Función en Modo Usuario**:  
+   Asegúrate de que el microcontrolador esté conectado y que la función haya sido ejecutada correctamente en **Modo Usuario**.
+
+2. **Espera a que Finalice la Ejecución**:  
+   La aplicación capturará todos los datos enviados por el microcontrolador entre las palabras **`start`** y **`finish`**. Una vez que se reciba la palabra **`finish`**, los datos estarán listos para su descarga.
+
+3. **Selecciona las Opciones de Formato**:  
+   Antes de descargar el archivo, selecciona las opciones de formato:
+
+   - **Separador de columnas**: Coma (`,`) o punto y coma (`;`).
+   - **Formato de puntos decimales**: Punto (`.`) o coma (`,`).
+
+4. **Descarga el Archivo**:  
+   Haz clic en el botón de descarga para guardar el archivo **CSV** en tu dispositivo.
+
+---
+
+## Ejemplo de Archivo CSV
+
+### Configuración: Separador de Coma (`,`) y Punto Decimal (`.`)
+
+```csv
+temperature,humidity
+25.5,60.2
+26.3,61.8
+27.1,62.4
+
+```
+
+<div
+  style={{
+    border: "1px #e2e8f0 solid",
+    display: "flex",
+    justifyContent: "center",
+  }}
+>
+  <video
+    src={data}
+    autoPlay={true}
+    loop
+    style={{
+      border: "black 1px",
+      width: "90%",
+      height: "auto",
+      aspectRatio: "450/253",
+    }}
+    controls
+  ></video>
+</div>
