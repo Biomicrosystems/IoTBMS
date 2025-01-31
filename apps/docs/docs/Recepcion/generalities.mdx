@@ -1,0 +1,95 @@
+---
+sidebar_position: 1
+---
+
+# Visón General
+
+En esta sección aprenderás cómo funciona la recepción de datos desde el microcontrolador hacia la aplicación, el protocolo de comunicación necesario, las palabras de control requeridas, y cómo formatear los datos para que la aplicación los interprete correctamente. También se explicará cómo la aplicación maneja los datos en **Modo Administrador** y **Modo Usuario**.
+
+---
+
+## Visión General
+
+La recepción de datos desde el microcontrolador utiliza el mismo protocolo de comunicación que el envío de comandos: **comunicación serial**. Esto significa que los datos enviados por el microcontrolador son leídos por la aplicación a través del puerto serial. Para que la aplicación pueda interpretar correctamente los datos, es necesario seguir ciertas reglas de formato y utilizar palabras de control específicas.
+
+Para configurar una función que envie datos se debe activar la opción de `¿Esta funcion envia datos al usuario?` al crear o editar una función.
+
+---
+
+## Palabras de Control: `start` y `finish`
+
+Para que la aplicación detecte cuándo comienza y termina la ejecución de una función, el microcontrolador debe enviar las palabras de control **`start`** y **`finish`**. Estas palabras permiten a la aplicación identificar el inicio y el final de los datos enviados.
+
+### Ejemplo de Código con Palabras de Control
+
+```cpp
+Serial.println("start"); // Indica el inicio de la ejecución
+digitalWrite(2, HIGH);   // Realiza una acción en el microcontrolador
+
+for (int i = 0; i < 20; i++) {
+  Serial.print(random(0, 100)); // Envía un valor aleatorio
+  Serial.print(",");
+  Serial.print("lastValue:");  // Formato para una variable específica
+  Serial.print(random(0, 100));
+  Serial.print(",");
+  Serial.print(random(0, 100));
+  Serial.println(",");
+}
+
+Serial.println("finish"); // Indica el final de la ejecución
+
+```
+
+1. **Inicio de la Ejecución**: La palabra start se envía al inicio de la ejecución de la función. Esto le indica a la aplicación que los datos que siguen pertenecen a la función en ejecución.
+
+2. **Datos Enviados**: Durante la ejecución, el microcontrolador envía datos formateados. Es necesario usar `Serial.println` o enviar un salto de linea para reconocer el final de linea y mostrar los datos en la consola de la aplicación.
+
+3. **Fin de la Ejecución**: La palabra finish se envía al final de la ejecución de la función. Esto le indica a la aplicación que no se enviarán más datos para esta función.
+
+## Formato de los Datos
+
+Para que la aplicación pueda interpretar y formatear correctamente los datos enviados por el microcontrolador, es necesario seguir estas reglas de formato:
+
+### 1. Variables específicas
+
+Cada dato debe estar asociado a una variable específica. Esto se logra utilizando el formato:
+`nombreDeVariable:dato`
+
+- **Ejemplo**: `temperatura:25`
+
+### 2. Datos para graficar
+
+Cada dato debe estar asociado a una variable específica. Esto se logra utilizando el formato:
+`>nombreDeVariable:dato`
+El carácter > le indica a la aplicación que los datos de esta variable deben ser graficados.
+
+- **Ejemplo**: `>temperatura:25`
+
+### 3. Separación de Variables
+
+Los datos de diferentes variables deben estar separados por comas `,`.
+
+- **Ejemplo**: `temperature:25,humidity:60`
+
+## Diferencias entre Modo Administrador y Modo Usuario
+
+La forma en que la aplicación maneja los datos depende del modo en el que se esté utilizando:
+
+### 1. Modo Administrador
+
+En el Modo Administrador, los datos enviados por el microcontrolador se muestran en tiempo real en la consola de la aplicación. Esto es posible porque la comunicación ocurre directamente a través del puerto serial.
+
+- Características:
+  - Los datos se muestran línea por línea en la consola a medida que son enviados por el microcontrolador.
+  - Es ideal para pruebas y depuración, ya que puedes observar los datos en tiempo real.
+  - No hay restricciones de red, ya que la comunicación es local.
+
+### 2. Modo Usuario
+
+En el Modo Usuario, los datos enviados por el microcontrolador no se muestran en tiempo real debido a restricciones de red.
+En su lugar, la aplicación captura todos los datos enviados entre las palabras de control start y finish, los guarda en un archivo CSV, y luego los envía al usuario.
+
+- Características:
+  - Los datos se procesan y se envían al usuario una vez que se recibe la palabra finish.
+  - Los datos se guardan en un archivo CSV para facilitar su descarga y análisis.
+  - Es ideal para laboratorios remotos, donde los usuarios necesitan acceder a los datos desde cualquier lugar.

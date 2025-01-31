@@ -1,0 +1,109 @@
+---
+sidebar_position: 2
+---
+
+import graph from "./graphData.mp4";
+
+# Funciones para Graficar Datos
+
+En esta sección aprenderás cómo configurar funciones en la aplicación para graficar datos enviados por el microcontrolador. También se explicará cómo formatear los datos correctamente para que la aplicación los interprete y los grafique automáticamente.
+
+Las funciones para graficar datos permiten visualizar en tiempo real o después de la ejecución los valores enviados por el microcontrolador. Esto es útil para monitorear variables como temperatura, humedad, velocidad, entre otros, en forma de gráficos.
+
+Para que la aplicación pueda graficar los datos, es necesario seguir un formato específico al enviarlos desde el microcontrolador.
+
+---
+
+## Pasos para Crear una Función que Grafique Datos
+
+1. **Accede al Panel de Funciones**:  
+   En la aplicación, dirígete a la sección de funciones y selecciona "Crear nueva función" o edita una existente.
+
+2. **Habilita la Recepción de Datos**:  
+   Activa la opción **¿Esta funcion envia datos al usuario?** para que la aplicación reciba y procese los datos enviados por el microcontrolador.
+
+3. **Guarda la Función**:  
+   Una vez configurada, guarda la función para que esté disponible en la aplicación.
+
+---
+
+## Formato de los Datos para Graficar
+
+Para que la aplicación pueda graficar los datos enviados por el microcontrolador, es necesario seguir este formato:
+
+### 1. **Formato de Variables para Graficar**
+
+Los datos que deben ser graficados deben estar precedidos por el carácter **`>`** seguido del nombre de la variable y el valor correspondiente. El formato es el siguiente:
+
+> ">nombreVariable:dato"
+
+### 2. **Separación de Variables**
+
+Si se envían múltiples variables en una misma línea, estas deben estar separadas por comas **`,`**.
+
+> "temperature:25,>humidity:60"
+
+en este caso `temperature` no será graficada y `humidity` si será graficada.
+
+---
+
+## Cómo Interactúa la Aplicación
+
+1. **Modo Administrador**:  
+   En el Modo Administrador, los datos enviados por el microcontrolador se grafican en tiempo real a medida que son recibidos por la aplicación.
+
+2. **Modo Usuario**:  
+   En el Modo Usuario, los datos se capturan entre las palabras **`start`** y **`finish`**, se procesan, y luego se grafican una vez que la ejecución de la función ha finalizado.
+
+---
+
+## Ejemplo de Código para Graficar Datos
+
+Aquí tienes un ejemplo de código en Arduino que envía datos formateados para ser graficados por la aplicación:
+
+```cpp
+void setup() {
+    Serial.begin(9600);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    char read = Serial.read();
+    if (read == 'A') {
+      Serial.println("start"); // Indica el inicio de la ejecución
+
+      for (int i = 0; i < 20; i++) {
+        Serial.print(">temperature:"); // Variable para graficar
+        Serial.print(random(20, 30));  // Valor aleatorio para temperatura
+        Serial.print(",");
+        Serial.print(">humidity:");   // Variable para graficar
+        Serial.print(random(40, 60)); // Valor aleatorio para humedad
+        Serial.println(",");
+        delay(500); // Simula un intervalo entre datos
+      }
+
+      Serial.println("finish"); // Indica el final de la ejecución
+    }
+  }
+}
+```
+
+<div
+  style={{
+    border: "1px #e2e8f0 solid",
+    display: "flex",
+    justifyContent: "center",
+  }}
+>
+  <video
+    src={graph}
+    loop
+    style={{
+      border: "black 1px",
+      width: "90%",
+      height: "auto",
+      aspectRatio: "450/253",
+    }}
+    controls
+  ></video>
+</div>
