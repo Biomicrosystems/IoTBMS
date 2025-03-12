@@ -83,7 +83,7 @@ function MobileMenu(props: {
         className="w-full rounded bg-accent py-2 text-sm text-white"
         onClick={() => props.router.push("/signUp")}
       >
-        Crea una cuenta
+        Crea tu cuenta
       </button>
       <span className="border border-lightText/30 dark:border-darkText/30" />
       <a className="text-sm text-lightText dark:text-darkText">Documentación</a>
