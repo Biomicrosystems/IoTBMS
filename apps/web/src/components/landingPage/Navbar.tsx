@@ -56,7 +56,7 @@ export default function Navbar() {
           className="hidden w-40 rounded bg-accent py-2 text-sm text-white lg:block"
           onClick={() => router.push("/signUp")}
         >
-          Crea una cuenta
+          Crea tu cuenta
         </button>
       </div>
       {isOpen ? <MobileMenu setOpen={setIsOpen} router={router} /> : <></>}
